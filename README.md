@@ -11,16 +11,18 @@ This project gives you all the jars you need to place on your system to get the 
 All the files are bundled per location you need to create them. The folder structure is relative to yor system's MQSI_BASE_FILEPATH
  and ... variable. For instance, if you have
 
-`
-MQSI_BASE_FILEPATH=C:\Program Files\IBM\ACE\12.0.11.3
-MQSI_REGISTRY=C:\ProgramData\IBM\MQSI
-`
+`MQSI_BASE_FILEPATH=C:\Program Files\IBM\ACE\12.0.11.3`
+
+`MQSI_REGISTRY=C:\ProgramData\IBM\MQSI`
+
 Then the full paths to cpy the files to will become
-`
-C:\Program Files\IBM\ACE\12.0.11.3\server\jplugin
-C:\Program Files\IBM\ACE\12.0.11.3\tools\plugins
-C:\ProgramData\IBM\MQSI\shared-classes
-`
+
+`C:\Program Files\IBM\ACE\12.0.11.3\server\jplugin`
+
+`C:\Program Files\IBM\ACE\12.0.11.3\tools\plugins`
+
+`C:\ProgramData\IBM\MQSI\shared-classes`
+
 ## Status
 | ACE Version | Status | Date |
 |-------------|--------|------|
