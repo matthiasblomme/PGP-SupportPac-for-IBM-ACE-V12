@@ -60,6 +60,7 @@ SET CLASSPATH=C:\Matthias\GIT\PGP-SupportPac-for-IBM-ACE-V12\MQSI_REGISTRY\share
 | 12.0.9.0    | Tested and validated | 2024/05/01  |
 | 12.0.10.0   | Tested and validated | 2024/05/01  |
 | 12.0.11.3   | Tested and validated | 2024/05/01  |
+| 12.0.12.5   | Tested and validated | 2024/10/24  |
 
 ## Authors
 | Name     | Role                     | Date       |
