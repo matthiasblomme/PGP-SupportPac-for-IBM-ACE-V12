@@ -16,7 +16,7 @@ Jar files for server and tools
 Supported classes for pgp operations
 
 ### [Test Project](Test%20Project)
-Test project interchange containing an aplication with an encryption and decryption flow. A policy project needs to be
+Test project interchange containing an application with an encryption and decryption flow. A policy project needs to be
 created in order to be able to use it.
 
 ## Installation
@@ -36,7 +36,7 @@ Then the full paths to cpy the files to will become
 `C:\ProgramData\IBM\MQSI\shared-classes`
 
 ## pgpKeytool command line
-Apart from installing and using the pgpt nodes in the toolkit, this deliverable also comes with a command line tool
+Apart from installing and using the pgp nodes in the toolkit, this deliverable also comes with a command line tool
 to read, extract, import, ... in short create and handle pgp stores and keys. 
 
 I am not going into detail on how to use it, please read the resources in the [Additional reading](#additional-reading) section.
