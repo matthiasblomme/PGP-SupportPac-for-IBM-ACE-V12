@@ -1,0 +1,9 @@
+[11/02/2026 14:52:49.19] Installation started 
+[11/02/2026 14:52:49.20] [INFO] Installation started 
+[11/02/2026 14:52:49.43] [WARNING] Not running as Administrator 
+[11/02/2026 14:52:49.43] [INFO] All required JAR files found 
+[11/02/2026 14:52:49.44] [INFO] Using provided ACE installation path: C:\Program Files\IBM\ACE\13.0.6.0 
+[11/02/2026 14:52:49.45] [INFO] ACE Version: 13.0.6.0 
+[11/02/2026 14:52:49.45] [WARNING] MQSI_REGISTRY not set, using default 
+[11/02/2026 14:52:49.50] [ERROR] Failed to copy PGPSupportPacImpl.jar 
+[11/02/2026 14:52:49.50] [ERROR] Installation failed 
