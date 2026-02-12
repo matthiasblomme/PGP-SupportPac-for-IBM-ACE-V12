@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.ibm.broker.supportpac.PGP">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MQSI_BASE_FILEPATH/server/jplugin/com.ibm.broker.supportpac.PGP.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

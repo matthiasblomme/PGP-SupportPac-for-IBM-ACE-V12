@@ -1,24 +1,41 @@
-This is free and unencumbered software released into the public domain.
+GNU LESSER GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
 
-Anyone is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means.
+Copyright (C) 2024-2026 Matthias Blomme and Contributors
 
-In jurisdictions that recognize copyright laws, the author or authors
-of this software dedicate any and all copyright interest in the
-software to the public domain. We make this dedication for the benefit
-of the public at large and to the detriment of our heirs and
-successors. We intend this dedication to be an overt act of
-relinquishment in perpetuity of all present and future rights to this
-software under copyright law.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
-For more information, please refer to <https://unlicense.org>
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+ADDITIONAL TERMS:
+
+This PGP SupportPac is provided free of charge for use in production environments,
+including commercial use. However, if you make modifications to this software,
+you are required to:
+
+1. Share your modifications with the community by:
+   - Creating a pull request to the original repository, OR
+   - Publishing your modifications in a publicly accessible repository
+
+2. Clearly document what changes you made and why
+
+3. Maintain this license and attribution in any modified versions
+
+This ensures the community benefits from improvements while allowing free
+production use.
+
+---
+
+For the complete LGPL-3.0 license text, see:
+https://www.gnu.org/licenses/lgpl-3.0.txt

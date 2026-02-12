@@ -1,0 +1,8 @@
+[11/02/2026 16:29:29.37] Installation started 
+[11/02/2026 16:29:29.38] [INFO] Installation started 
+[11/02/2026 16:29:29.66] [INFO] Running with Administrator privileges 
+[11/02/2026 16:29:29.66] [INFO] All required JAR files found 
+[11/02/2026 16:29:29.68] [INFO] Using provided ACE installation path: C:\Program Files\IBM\ACE\13.0.6.0 
+[11/02/2026 16:29:29.68] [INFO] ACE Version: 13.0.6.0 
+[11/02/2026 16:29:29.72] [ERROR] Failed to copy PGPSupportPacImpl.jar 
+[11/02/2026 16:29:29.73] [ERROR] Installation failed 
