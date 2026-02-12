@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="PGP-SupportPac-for-IBM-ACE-V12">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/PGPEncryptioAndDecryption_lib.zip!/" />
+      <root url="jar://$PROJECT_DIR$/PGP-Runtime-Jars.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

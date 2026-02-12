@@ -1,0 +1,12 @@
+[11/02/2026 14:53:05.90] Installation started 
+[11/02/2026 14:53:05.92] [INFO] Installation started 
+[11/02/2026 14:53:06.12] [INFO] Running with Administrator privileges 
+[11/02/2026 14:53:06.13] [INFO] All required JAR files found 
+[11/02/2026 14:53:06.15] [INFO] Using provided ACE installation path: C:\Program Files\IBM\ACE\13.0.6.0 
+[11/02/2026 14:53:06.16] [INFO] ACE Version: 13.0.6.0 
+[11/02/2026 14:53:06.22] [INFO] Installed PGPSupportPacImpl.jar 
+[11/02/2026 14:53:06.24] [INFO] Installed PGPSupportPac.jar 
+[11/02/2026 14:53:06.30] [INFO] Installed bcpg-jdk18on-1.78.1.jar 
+[11/02/2026 14:53:06.34] [INFO] Installed bcprov-jdk18on-1.78.1.jar 
+[11/02/2026 14:53:06.37] [INFO] All files verified successfully 
+[11/02/2026 14:53:06.45] [SUCCESS] Installation completed successfully 

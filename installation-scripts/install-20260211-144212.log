@@ -1,0 +1,5 @@
+[2026-02-11 14:42:12] [INFO] Installation started
+[2026-02-11 14:42:12] [INFO] PowerShell version: 5.1.26100.7705
+[2026-02-11 14:42:12] [WARNING] Not running as Administrator
+[2026-02-11 14:42:12] [INFO] Using provided ACE installation path: C:\Program Files\IBM\ACE\13.0.6.0
+[2026-02-11 14:42:12] [ERROR] Installation failed: The term 'Write-InfoMessage' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the spelling of the name, or if a path was included, verify that the path is correct and try again.

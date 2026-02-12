@@ -1,11 +1,21 @@
-# PGP-Support-Pac-for-IBM-AppConnect-Enterprise-V12
+# PGP Support Pac for IBM App Connect Enterprise
 
 ## Description
-PGP SupportPac for IBM App Connect Enterprise V12.0.10 onwards. It uses the compiled code from
+PGP SupportPac for IBM App Connect Enterprise V12.0.10 onwards (ACE 13.x testing in progress). It uses the compiled code from
 [MyOpenTech-PGP-SupportPac](https://github.com/matthiasblomme/MyOpenTech-PGP-SupportPac) which on its own is a fork from
 [dipakpal/MyOpenTech-PGP-SupportPac](https://github.com/dipakpal/MyOpenTech-PGP-SupportPac)
 
-This project gives you all the jars you need to place on your system to get the PGP encryption/decryption up and running
+This project provides all the JAR files you need to enable PGP encryption/decryption capabilities in IBM ACE.
+
+## Quick Start
+
+**For detailed installation instructions, see [INSTALLATION.md](INSTALLATION.md)**
+
+### Automated Installation (Recommended)
+```cmd
+cd installation-scripts
+install-pgp-supportpac.bat
+```
 
 ## Content
 
@@ -20,53 +30,106 @@ Test project interchange containing an application with an encryption and decryp
 created in order to be able to use it.
 
 ## Installation
-All the files are bundled per location you need to create them. The folder structure is relative to yor system's
-MQSI_BASE_FILEPATH and MQSI_REGISTRY variable. For instance, if you have
 
-`MQSI_BASE_FILEPATH=C:\Program Files\IBM\ACE\12.0.11.3`
+### Prerequisites
+- IBM App Connect Enterprise 12.0.9.0 or higher
+- Administrator privileges (recommended)
+- Windows operating system
 
-`MQSI_REGISTRY=C:\ProgramData\IBM\MQSI`
+### Quick Installation
 
-Then the full paths to cpy the files to will become
-
-`C:\Program Files\IBM\ACE\12.0.11.3\server\jplugin`
-
-`C:\Program Files\IBM\ACE\12.0.11.3\tools\plugins`
-
-`C:\ProgramData\IBM\MQSI\shared-classes`
-
-## pgpKeytool command line
-Apart from installing and using the pgp nodes in the toolkit, this deliverable also comes with a command line tool
-to read, extract, import, ... in short create and handle pgp stores and keys. 
-
-I am not going into detail on how to use it, please read the resources in the [Additional reading](#additional-reading) section.
-
-Now, to the practical bit, in order to be able to run the java keytool command, you simply need to start the ACE console
-for your desired ACE version and add 2 entries to the classpath
-- bcpg-jdk18on-177.jar
-- com.ibm.broker.supportpac.PGP.jar
-
-With my code cloned to C:\Matthias\GIT\PGP-SupportPac-for-IBM-ACE-V12 (please update this to your local setup, and run this
-from an ACE console)
+**Automated Installation (Recommended)**
+```cmd
+cd installation-scripts
+install-pgp-supportpac.bat
 ```
-SET CLASSPATH=C:\Matthias\GIT\PGP-SupportPac-for-IBM-ACE-V12\MQSI_BASE_FILEPATH\server\jplugin\com.ibm.broker.supportpac.PGP.jar;%CLASSPATH%
-SET CLASSPATH=C:\Matthias\GIT\PGP-SupportPac-for-IBM-ACE-V12\MQSI_REGISTRY\shared-classes\bcpg-jdk18on-177.jar;%CLASSPATH%
+
+**Manual Installation**
+
+All files are organized by their target location relative to your system's `MQSI_BASE_FILEPATH` and `MQSI_REGISTRY` variables.
+
+For example, if you have:
+- `MQSI_BASE_FILEPATH=C:\Program Files\IBM\ACE\13.0.6.0`
+- `MQSI_REGISTRY=C:\ProgramData\IBM\MQSI`
+
+Then copy files to:
+- `C:\Program Files\IBM\ACE\13.0.6.0\server\jplugin\PGPSupportPacImpl.jar`
+- `C:\Program Files\IBM\ACE\13.0.6.0\tools\plugins\PGPSupportPac.jar`
+- `C:\ProgramData\IBM\MQSI\shared-classes\bcpg-jdk18on-1.78.1.jar`
+- `C:\ProgramData\IBM\MQSI\shared-classes\bcprov-jdk18on-1.78.1.jar`
+
+**For complete installation instructions, troubleshooting, and verification steps, see [INSTALLATION.md](INSTALLATION.md)**
+
+## pgpKeytool Command Line Utility
+
+This deliverable includes a command-line tool for managing PGP keys and keystores (create, import, export, list, etc.).
+
+### Setup
+
+1. Open an ACE Command Console for your ACE version
+2. Add the required JARs to your CLASSPATH:
+
+```cmd
+SET CLASSPATH=%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar;%CLASSPATH%
+SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar;%CLASSPATH%
+SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar;%CLASSPATH%
 ```
+
+### Example Usage
+
+```cmd
+REM List keys in a keystore
+java com.ibm.broker.supportpac.pgp.PGPKeytool -list -keystore mykeys.pgp
+
+REM Generate a new key pair
+java com.ibm.broker.supportpac.pgp.PGPKeytool -genkey -alias mykey -keystore mykeys.pgp
+```
+
+**For detailed pgpKeytool usage, see [INSTALLATION.md](INSTALLATION.md#using-pgpkeytool-command-line) and the resources in [Additional reading](#additional-reading).**
+
 ![img.png](img.png)
 
-## Status
-| ACE Version | Status               | Date        |
-|-------------|----------------------|-------------|
-| 12.0.9.0    | Tested and validated | 2024/05/01  |
-| 12.0.10.0   | Tested and validated | 2024/05/01  |
-| 12.0.11.3   | Tested and validated | 2024/05/01  |
-| 12.0.12.5   | Tested and validated | 2024/10/24  |
+## Compatibility Status
 
-## Authors
+| ACE Version | Status               | Date        | Notes |
+|-------------|----------------------|-------------|-------|
+| 12.0.9.0    | ✅ Tested and validated | 2024/05/01  | |
+| 12.0.10.0   | ✅ Tested and validated | 2024/05/01  | |
+| 12.0.11.3   | ✅ Tested and validated | 2024/05/01  | |
+| 12.0.12.5   | ✅ Tested and validated | 2024/10/24   |  |
+| 13.0.6.0    | 🧪 Testing in progress | 2026/02/11   | See [INSTALLATION.md](INSTALLATION.md#ace-13x-compatibility-notes) |
+
+**Note**: ACE 13.x has not been officially tested yet. If you're using ACE 13.x, please test thoroughly in a non-production environment first and report your results.
+
+## Project Structure
+
+```
+PGP-SupportPac-for-IBM-ACE-V12/
+├── README.md                          # This file
+├── INSTALLATION.md                    # Comprehensive installation guide
+├── installation-scripts/              # Automated installation scripts
+│   ├── Install-PGPSupportPac.ps1     # PowerShell installation script
+│   └── install-pgp-supportpac.bat    # Batch file installation script
+├── MQSI_BASE_FILEPATH/               # Files for ACE installation directory
+│   ├── server/jplugin/               # Server-side plugins
+│   │   └── PGPSupportPacImpl.jar
+│   └── tools/plugins/                # Toolkit plugins
+│       └── PGPSupportPac.jar
+├── MQSI_REGISTRY/                    # Files for MQSI registry directory
+│   └── shared-classes/               # Shared libraries
+│       ├── bcpg-jdk18on-1.78.1.jar   # Bouncy Castle PGP library
+│       └── bcprov-jdk18on-1.78.1.jar # Bouncy Castle crypto provider
+└── Test Project/                     # Sample test project
+    └── TestPGP.zip
+```
+
+## Authors & Contributors
+
 | Name     | Role                     | Date       |
 |----------|--------------------------|------------|
-| Matthias | Upgrade pgp support jars | 2024/05/01 |
-| Matthias | updated keytool info     | 2024/09/09 |
+| Matthias | Upgrade PGP support jars | 2024/05/01 |
+| Matthias | Updated keytool info     | 2024/09/09 |
+| Matthias | Added installation automation | 2026/02/11 |
 
 ## Additional reading
 [PGP SupportPac v1.0.0.2 IIBv10.ppt](https://github.com/dipakpal/MyOpenTech-PGP-SupportPac/blob/master/PGP%20SupportPac%20v1.0.0.2%20IIBv10.ppt)

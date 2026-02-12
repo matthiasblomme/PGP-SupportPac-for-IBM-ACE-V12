@@ -1,0 +1,14 @@
+[2026-02-11 14:41:50] [INFO] Installation started
+[2026-02-11 14:41:50] [INFO] PowerShell version: 5.1.26100.7705
+[2026-02-11 14:41:50] [ERROR] Installation failed: Cannot bind parameter 'ForegroundColor'. Cannot convert value "PowerShell version: 5.1.26100.7705 Green
+}
+
+function Write-InfoMessage {
+    param([string]PowerShell version: 5.1.26100.7705)
+    Write-ColorOutput โน PowerShell version: 5.1.26100.7705" to type "System.ConsoleColor". Error: "Unable to match the identifier name PowerShell version: 5.1.26100.7705 Green
+}
+
+function Write-InfoMessage {
+    param([string]PowerShell version: 5.1.26100.7705)
+    Write-ColorOutput โน PowerShell version: 5.1.26100.7705 to a valid enumerator name. Specify one of the following enumerator names and try again:
+Black, DarkBlue, DarkGreen, DarkCyan, DarkRed, DarkMagenta, DarkYellow, Gray, DarkGray, Blue, Green, Cyan, Red, Magenta, Yellow, White"

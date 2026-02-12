@@ -1,0 +1,10 @@
+[11/02/2026 14:44:01.13] Installation started 
+[11/02/2026 14:44:01.14] [INFO] Installation started 
+[11/02/2026 14:44:01.40] [WARNING] Not running as Administrator 
+[11/02/2026 14:44:01.41] [INFO] All required JAR files found 
+[11/02/2026 14:44:01.43] [INFO] Using provided ACE installation path: C:\Program Files\IBM\ACE\13.0.6.0 
+[11/02/2026 14:44:01.44] [INFO] ACE Version: 13.0.6.0 
+[11/02/2026 14:44:06.96] [INFO] Backup location: D:\GIT\PGP-SupportPac-for-IBM-ACE-V12\installation-scripts\backup\20260211-144401 
+[11/02/2026 14:44:06.97] [INFO] Backed up 0 file(s) 
+[11/02/2026 14:44:07.00] [ERROR] Failed to copy PGPSupportPacImpl.jar 
+[11/02/2026 14:44:07.01] [ERROR] Installation failed 
