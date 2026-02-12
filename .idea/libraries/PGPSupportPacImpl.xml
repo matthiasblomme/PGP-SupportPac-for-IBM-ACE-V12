@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="PGPSupportPacImpl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/MQSI_BASE_FILEPATH/server/jplugin/PGPSupportPacImpl.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
