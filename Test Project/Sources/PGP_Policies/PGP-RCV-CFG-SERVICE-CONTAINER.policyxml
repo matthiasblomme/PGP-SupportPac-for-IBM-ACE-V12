@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policies>
+  <policy policyType="UserDefined" policyName="PGP-RCV-CFG-SERVICE-CONTAINER" policyTemplate="UserDefined">
+    <PrivateKeyRepository>/home/aceuser/pgp-test/keys/receiver-private-repository.pgp</PrivateKeyRepository>
+    <PublicKeyRepository>/home/aceuser/pgp-test/keys/receiver-public-repository.pgp</PublicKeyRepository>
+    <DefaultDecryptionKeyPassphrase>passw0rd</DefaultDecryptionKeyPassphrase>
+    <DefaultSignKeyPassphrase>passw0rd</DefaultSignKeyPassphrase>
+    <DefaultSignKeyUserId>Receiver &lt;receiver@testpgp.com&gt;</DefaultSignKeyUserId>
+  </policy>
+</policies>
