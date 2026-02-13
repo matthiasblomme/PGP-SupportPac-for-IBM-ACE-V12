@@ -1,0 +1,44 @@
+services:
+  ace-pgp-test:
+    image: cp.icr.io/cp/appc/ace:13.0.6.0-r1
+    container_name: ace-pgp-test
+    hostname: ace-pgp-test
+    user: root
+    
+    environment:
+      - LICENSE=accept
+      - ACE_SERVER_NAME=ace-server
+      - ACE_ENABLE_METRICS=false
+      - LOG_FORMAT=basic
+    
+    ports:
+      - "7800:7800"  # HTTP listener
+      - "7600:7600"  # Admin REST API
+    
+    volumes:
+      # Map aceuser home for runtime access
+      - ./local-aceuser-home:/home/aceuser
+      
+      # Mount source code (read-only)
+      - ../:/tmp/pgp-supportpac:ro
+      
+      # Mount test script
+      - ./scripts/run-tests.sh:/tmp/run-tests.sh:ro
+    
+    # Override entrypoint to run our test script
+    entrypoint: ["/bin/bash"]
+    command: ["/tmp/run-tests.sh"]
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7800/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    
+    networks:
+      - ace-test-network
+
+networks:
+  ace-test-network:
+    driver: bridge
