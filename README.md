@@ -105,13 +105,17 @@ PGP-SupportPac-for-IBM-ACE-V12/
 │   └── tools/plugins/PGPSupportPac.jar
 ├── MQSI_REGISTRY/                              # Shared libraries
 │   └── shared-classes/
-│       ├── bcpg-jdk18on-1.78.1.jar
-│       └── bcprov-jdk18on-1.78.1.jar
-└── Test Project/                               # Test application
-    ├── TestPGP.zip                             # Project Interchange
-    └── PGP_Policies/                           # Policy project
-        ├── PGP-SDR-CFG-SERVICE.policyxml
-        └── PGP-RCV-CFG-SERVICE.policyxml
+│       ├── bcpg-jdk18on-1.81.jar
+│       └── bcprov-jdk18on-1.81.jar
+└── testing/                                    # Testing framework
+    ├── docker/                                 # Docker testing
+    ├── standalone-server/                      # Standalone server testing
+    ├── node-managed-server/                    # Node-managed testing
+    └── test-resources/                         # Shared test resources
+        ├── Sources/                            # ACE projects
+        │   ├── PGP_Policies/                   # Policy project
+        │   └── TestPGP_App/                    # Test application
+        └── TestPgp_ProjectInterchange.zip      # Project Interchange
 ```
 
 ## Key Features

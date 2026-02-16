@@ -182,15 +182,15 @@ Import from: testing/test-resources/TestPgp_ProjectInterchange.zip
 
 ## Backward Compatibility
 
-### Temporary Compatibility
+### Cleanup Complete (2026-02-16)
 
-For a transition period, the old structure is **kept intact**:
+The old directories have been **removed** to maintain a clean repository:
 
-- ✅ `docker-testing/` still exists (copy)
-- ✅ `Test Project/` still exists (original)
-- ✅ `TEST-SETUP-WALKTHROUGH-ACE-13.md` still in root (copy)
+- ❌ `docker-testing/` - Removed (use `testing/docker/`)
+- ❌ `Test Project/` - Removed (use `testing/test-resources/` and `testing/standalone-server/`)
+- ✅ `TEST-SETUP-WALKTHROUGH-ACE-13.md` still in root (historical reference)
 
-**Recommendation:** Update to new paths as soon as possible.
+**All users must now use the new `testing/` structure.**
 
 ### Breaking Changes
 

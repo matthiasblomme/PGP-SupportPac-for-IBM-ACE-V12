@@ -199,12 +199,12 @@ java pgpkeytool listPublicKeys -pr C:\temp\pgp\keys\receiver-public-repository.p
 
 ## Files Updated
 
-1. **Test Project/PGP_Policies/PGP-SDR-CFG-SERVICE.policyxml**
+1. **testing/test-resources/Sources/PGP_Policies/PGP-SDR-CFG-SERVICE.policyxml**
    - Corrected repository paths
    - Removed invalid parameters
    - Updated to use passw0rd
 
-2. **Test Project/PGP_Policies/PGP-RCV-CFG-SERVICE.policyxml**
+2. **testing/test-resources/Sources/PGP_Policies/PGP-RCV-CFG-SERVICE.policyxml**
    - Corrected repository paths
    - Removed invalid parameters
    - Updated to use passw0rd
