@@ -1,0 +1,8 @@
+# Placeholder for future node-managed testing scripts
+
+This directory will contain scripts for:
+- Node creation and configuration
+- Integration server deployment
+- PGP component deployment
+- Test execution
+- Cleanup and teardown
