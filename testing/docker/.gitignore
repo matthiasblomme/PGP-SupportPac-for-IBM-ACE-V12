@@ -1,0 +1,9 @@
+# Volume mount directories (created at runtime)
+local-ace-install/
+local-aceuser-home/
+
+# Docker volumes
+*.log
+
+# Test results
+test-results/
