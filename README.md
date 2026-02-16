@@ -15,16 +15,27 @@ Based on compiled code from [MyOpenTech-PGP-SupportPac](https://github.com/matth
    ```
 
 2. **Test the installation:**
-   - Follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md)
+   - **Docker Testing (Recommended):** See [testing/docker/README.md](testing/docker/README.md)
+   - **Standalone Server Testing:** See [testing/standalone-server/README.md](testing/standalone-server/README.md)
+   - **All Testing Options:** See [testing/README.md](testing/README.md)
 
 ## Documentation
 
+### Installation & Setup
 | Document | Description |
 |----------|-------------|
 | **[INSTALLATION.md](INSTALLATION.md)** | Complete installation guide with automated and manual options |
-| **[TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md)** | Step-by-step testing walkthrough with screenshots |
 | **[PGPKEYTOOL-COMMANDS.md](PGPKEYTOOL-COMMANDS.md)** | Complete pgpKeytool command reference |
 | **[POLICY-CONFIGURATION-SUMMARY.md](POLICY-CONFIGURATION-SUMMARY.md)** | Policy configuration details and examples |
+
+### Testing
+| Document | Description |
+|----------|-------------|
+| **[testing/README.md](testing/README.md)** | Main testing guide - all testing approaches |
+| **[testing/docker/README.md](testing/docker/README.md)** | Docker-based automated testing |
+| **[testing/standalone-server/README.md](testing/standalone-server/README.md)** | Local Windows testing with ACE installed |
+| **[testing/standalone-server/TEST-SETUP-WALKTHROUGH.md](testing/standalone-server/TEST-SETUP-WALKTHROUGH.md)** | Detailed step-by-step walkthrough with screenshots |
+| **[testing/MIGRATION-GUIDE.md](testing/MIGRATION-GUIDE.md)** | Guide for migrating to new testing structure |
 
 ## Compatibility Status
 

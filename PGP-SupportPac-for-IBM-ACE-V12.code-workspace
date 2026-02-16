@@ -2,9 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../MyOpenTech-PGP-SupportPac"
 		}
 	],
 	"settings": {}
