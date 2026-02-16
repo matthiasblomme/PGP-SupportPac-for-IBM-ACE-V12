@@ -158,11 +158,25 @@ java pgpkeytool generatePGPKeyPair -i "Receiver <receiver@example.com>" -s C:\ke
 
 ### 3. Test the Installation
 
-Follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md) which includes:
-- Key generation and repository setup
-- Policy configuration
-- Flow deployment
-- End-to-end encryption/decryption testing
+See the [testing/](testing/) directory for multiple testing approaches:
+- **[Docker Testing](testing/docker/)** - Automated containerized testing
+- **[Standalone Server](testing/standalone-server/)** - Local Windows testing
+- **[Node-Managed Server](testing/node-managed-server/)** - Multi-server testing
+
+Or follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md).
+
+## Known Issues
+
+### ⚠️ Docker UBI Image Classloader Issue (Work in Progress)
+
+When using IBM ACE UBI (Universal Base Image) containers, the Java classloader may load older encryption JARs from the base image instead of the Bouncy Castle 1.81 JARs provided by this SupportPac.
+
+**Status:** Under investigation
+**Impact:** Docker testing only (standalone and node-managed deployments are not affected)
+**Symptoms:** Encryption/decryption failures, classloader errors, wrong JAR versions loaded
+**Workaround:** Use non-UBI ACE images or manually verify JAR versions in container
+
+See [testing/docker/README.md](testing/docker/README.md) for more details and current investigation status.
 
 ## Authors & Contributors
 

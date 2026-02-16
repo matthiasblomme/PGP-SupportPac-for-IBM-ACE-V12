@@ -139,6 +139,30 @@ Located in `Test Project/Sources/PGP_Policies/`:
 Located in `Test Project/Sources/Deploymentdescriptors/`:
 - `containerOverrides.properties` - Overrides flow properties for container paths
 
+## Known Issues
+
+### ⚠️ UBI Image Classloader Issue (Work in Progress)
+
+**Status:** Under investigation
+
+**Issue:** When using IBM ACE UBI (Universal Base Image) containers, the Java classloader behaves differently and may load older encryption JARs from the base image instead of the Bouncy Castle 1.81 JARs we provide.
+
+**Symptoms:**
+- Encryption/decryption may fail with classloader errors
+- Wrong version of Bouncy Castle libraries being used
+- Inconsistent behavior between local and container environments
+
+**Current Workaround:**
+- Use non-UBI ACE images if available
+- Manually verify JAR versions in container: `docker exec ace-pgp-test ls -la /home/aceuser/ace-server/shared-classes/`
+
+**Investigation Status:**
+- Classloader hierarchy differences in UBI images
+- Potential conflicts with base image encryption libraries
+- Testing alternative JAR placement strategies
+
+This issue does not affect standalone server or node-managed server deployments.
+
 ## Troubleshooting
 
 ### Issue: "Docker is not running"
