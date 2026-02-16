@@ -15,16 +15,27 @@ Based on compiled code from [MyOpenTech-PGP-SupportPac](https://github.com/matth
    ```
 
 2. **Test the installation:**
-   - Follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md)
+   - **Docker Testing (Recommended):** See [testing/docker/README.md](testing/docker/README.md)
+   - **Standalone Server Testing:** See [testing/standalone-server/README.md](testing/standalone-server/README.md)
+   - **All Testing Options:** See [testing/README.md](testing/README.md)
 
 ## Documentation
 
+### Installation & Setup
 | Document | Description |
 |----------|-------------|
 | **[INSTALLATION.md](INSTALLATION.md)** | Complete installation guide with automated and manual options |
-| **[TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md)** | Step-by-step testing walkthrough with screenshots |
 | **[PGPKEYTOOL-COMMANDS.md](PGPKEYTOOL-COMMANDS.md)** | Complete pgpKeytool command reference |
 | **[POLICY-CONFIGURATION-SUMMARY.md](POLICY-CONFIGURATION-SUMMARY.md)** | Policy configuration details and examples |
+
+### Testing
+| Document | Description |
+|----------|-------------|
+| **[testing/README.md](testing/README.md)** | Main testing guide - all testing approaches |
+| **[testing/docker/README.md](testing/docker/README.md)** | Docker-based automated testing |
+| **[testing/standalone-server/README.md](testing/standalone-server/README.md)** | Local Windows testing with ACE installed |
+| **[testing/standalone-server/TEST-SETUP-WALKTHROUGH.md](testing/standalone-server/TEST-SETUP-WALKTHROUGH.md)** | Detailed step-by-step walkthrough with screenshots |
+| **[testing/MIGRATION-GUIDE.md](testing/MIGRATION-GUIDE.md)** | Guide for migrating to new testing structure |
 
 ## Compatibility Status
 
@@ -94,13 +105,17 @@ PGP-SupportPac-for-IBM-ACE-V12/
 │   └── tools/plugins/PGPSupportPac.jar
 ├── MQSI_REGISTRY/                              # Shared libraries
 │   └── shared-classes/
-│       ├── bcpg-jdk18on-1.78.1.jar
-│       └── bcprov-jdk18on-1.78.1.jar
-└── Test Project/                               # Test application
-    ├── TestPGP.zip                             # Project Interchange
-    └── PGP_Policies/                           # Policy project
-        ├── PGP-SDR-CFG-SERVICE.policyxml
-        └── PGP-RCV-CFG-SERVICE.policyxml
+│       ├── bcpg-jdk18on-1.81.jar
+│       └── bcprov-jdk18on-1.81.jar
+└── testing/                                    # Testing framework
+    ├── docker/                                 # Docker testing
+    ├── standalone-server/                      # Standalone server testing
+    ├── node-managed-server/                    # Node-managed testing
+    └── test-resources/                         # Shared test resources
+        ├── Sources/                            # ACE projects
+        │   ├── PGP_Policies/                   # Policy project
+        │   └── TestPGP_App/                    # Test application
+        └── TestPgp_ProjectInterchange.zip      # Project Interchange
 ```
 
 ## Key Features
@@ -143,11 +158,25 @@ java pgpkeytool generatePGPKeyPair -i "Receiver <receiver@example.com>" -s C:\ke
 
 ### 3. Test the Installation
 
-Follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md) which includes:
-- Key generation and repository setup
-- Policy configuration
-- Flow deployment
-- End-to-end encryption/decryption testing
+See the [testing/](testing/) directory for multiple testing approaches:
+- **[Docker Testing](testing/docker/)** - Automated containerized testing
+- **[Standalone Server](testing/standalone-server/)** - Local Windows testing
+- **[Node-Managed Server](testing/node-managed-server/)** - Multi-server testing
+
+Or follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md).
+
+## Known Issues
+
+### ⚠️ Docker UBI Image Classloader Issue (Work in Progress)
+
+When using IBM ACE UBI (Universal Base Image) containers, the Java classloader may load older encryption JARs from the base image instead of the Bouncy Castle 1.81 JARs provided by this SupportPac.
+
+**Status:** Under investigation
+**Impact:** Docker testing only (standalone and node-managed deployments are not affected)
+**Symptoms:** Encryption/decryption failures, classloader errors, wrong JAR versions loaded
+**Workaround:** Use non-UBI ACE images or manually verify JAR versions in container
+
+See [testing/docker/README.md](testing/docker/README.md) for more details and current investigation status.
 
 ## Authors & Contributors
 
