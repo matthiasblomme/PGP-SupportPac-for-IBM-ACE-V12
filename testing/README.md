@@ -8,7 +8,7 @@ This directory contains three different testing approaches, each suited for diff
 
 1. **[Docker Testing](docker/)** - Containerized, automated testing
 2. **[Standalone Server Testing](standalone-server/)** - Local Windows testing with ACE installed
-3. **[Node-Managed Server Testing](node-managed-server/)** - Future: Multi-server, node-managed testing
+3. **[Node-Managed Server Testing](node-managed-server/)** - Multi-server, node-managed testing
 
 ## Quick Comparison
 
@@ -17,11 +17,11 @@ This directory contains three different testing approaches, each suited for diff
 | **Setup Time** | 5 minutes | 10-15 minutes | 20-30 minutes |
 | **Prerequisites** | Docker Desktop | ACE installed | ACE + Node |
 | **Isolation** | ✅ High | ⚠️ Medium | ❌ Low |
-| **Automation** | ✅ Full | ✅ Full | 🚧 Planned |
+| **Automation** | ✅ Full | ✅ Full | ✅ Full |
 | **Production-like** | ⚠️ Medium | ✅ High | ✅✅ Very High |
 | **Multi-server** | ❌ No | ❌ No | ✅ Yes |
 | **Platform** | Windows/Linux/Mac | Windows | Windows/Linux |
-| **Status** | ✅ Ready | ✅ Ready | 🚧 Planned |
+| **Status** | ✅ Ready | ✅ Ready | ✅ Ready |
 
 ## Quick Start
 
@@ -41,7 +41,7 @@ This directory contains three different testing approaches, each suited for diff
 - Prefer local file system access
 - Want production-like environment
 
-**Use Node-Managed Testing if you:** (Future)
+**Use Node-Managed Testing if you:**
 - Need multi-server testing
 - Want centralized management
 - Test node-level features
@@ -86,9 +86,21 @@ deploy_and_test.bat
 
 ### Node-Managed Testing
 
-**Status:** 🚧 Planned for future release
+**Prerequisites:**
+- IBM ACE 13.0.6.0 installed
+- Windows OS
+- Administrator privileges
 
-📖 [Node-Managed Testing Plan](node-managed-server/docs/NODE-TESTING-PLAN.md)
+**Quick Start:**
+```cmd
+cd testing/node-managed-server/scripts
+setup-and-test-node.bat
+```
+
+**Time:** ~30-40 minutes (includes node creation, server setup, and testing)
+
+📖 [Full Node-Managed Server Guide](node-managed-server/README.md)
+📖 [Implementation Details](node-managed-server/IMPLEMENTATION-COMPLETE.md)
 
 ## Directory Structure
 
@@ -116,8 +128,11 @@ testing/
 │   ├── TEST-SETUP-WALKTHROUGH.md
 │   └── docs/                    # SIS-specific docs
 │
-├── node-managed-server/         # Future: Node-managed testing
+├── node-managed-server/         # Node-managed testing
 │   ├── README.md
+│   ├── IMPLEMENTATION-COMPLETE.md
+│   └── scripts/
+│       └── setup-and-test-node.bat
 │   ├── docs/
 │   └── scripts/
 │
