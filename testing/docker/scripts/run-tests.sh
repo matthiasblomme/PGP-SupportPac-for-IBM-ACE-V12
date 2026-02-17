@@ -94,14 +94,22 @@ cp /tmp/pgp-supportpac/MQSI_BASE_FILEPATH/server/jplugin/PGPSupportPacImpl.jar \
 chmod 644 "$ACE_DIR/server/jplugin/PGPSupportPacImpl.jar"
 log_info "Installed PGPSupportPacImpl.jar"
 
-# Install Bouncy Castle bcpg JAR to ACE's MQ lib directory
-# ACE already has bcprov 1.81 in /opt/ibm/ace-13/server/MQ/lib/ but is missing bcpg
-# We need to add bcpg to the same location so they're loaded together
-log_info "Installing bcpg JAR to ACE MQ lib directory..."
+# Install Bouncy Castle JARs to ACE's MQ lib directory
+# ACE already has bcprov 1.81 in /opt/ibm/ace-13/server/MQ/lib/ but is missing bcpg and bcutil
+# We need to add bcpg and bcutil to the same location so they're loaded together
+log_info "Installing BouncyCastle JARs to ACE MQ lib directory..."
+
+# Copy bcpg
 cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcpg-jdk18on-1.81.jar \
    /opt/ibm/ace-13/server/MQ/lib/ || error_exit "Failed to copy bcpg JAR to MQ lib"
+log_info "Installed bcpg-jdk18on-1.81.jar"
 
-log_info "Installed bcpg-jdk18on-1.81.jar to /opt/ibm/ace-13/server/MQ/lib/"
+# Copy bcutil (provides backward compatibility for relocated classes)
+cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcutil-jdk18on-1.81.jar \
+   /opt/ibm/ace-13/server/MQ/lib/ || error_exit "Failed to copy bcutil JAR to MQ lib"
+log_info "Installed bcutil-jdk18on-1.81.jar"
+
+log_info "All BouncyCastle JARs installed to /opt/ibm/ace-13/server/MQ/lib/"
 log_info "Bouncy Castle JARs in MQ lib:"
 ls -la /opt/ibm/ace-13/server/MQ/lib/bc*.jar
 
