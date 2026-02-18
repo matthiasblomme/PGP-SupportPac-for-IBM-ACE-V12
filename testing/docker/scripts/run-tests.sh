@@ -94,16 +94,31 @@ cp /tmp/pgp-supportpac/MQSI_BASE_FILEPATH/server/jplugin/PGPSupportPacImpl.jar \
 chmod 644 "$ACE_DIR/server/jplugin/PGPSupportPacImpl.jar"
 log_info "Installed PGPSupportPacImpl.jar"
 
-# Install Bouncy Castle bcpg JAR to ACE's MQ lib directory
-# ACE already has bcprov 1.81 in /opt/ibm/ace-13/server/MQ/lib/ but is missing bcpg
-# We need to add bcpg to the same location so they're loaded together
-log_info "Installing bcpg JAR to ACE MQ lib directory..."
-cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcpg-jdk18on-1.81.jar \
-   /opt/ibm/ace-13/server/MQ/lib/ || error_exit "Failed to copy bcpg JAR to MQ lib"
+# Install Bouncy Castle JARs to integration server shared-classes
+# We need all three JARs: bcprov, bcpg, and bcutil
+log_info "Installing BouncyCastle JARs to integration server shared-classes..."
 
-log_info "Installed bcpg-jdk18on-1.81.jar to /opt/ibm/ace-13/server/MQ/lib/"
-log_info "Bouncy Castle JARs in MQ lib:"
-ls -la /opt/ibm/ace-13/server/MQ/lib/bc*.jar
+# Create shared-classes directory if it doesn't exist
+mkdir -p /home/aceuser/ace-server/shared-classes
+
+# Copy bcprov
+cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcprov-jdk18on-1.81.jar \
+   /home/aceuser/ace-server/shared-classes/ || error_exit "Failed to copy bcprov JAR"
+log_info "Installed bcprov-jdk18on-1.81.jar"
+
+# Copy bcpg
+cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcpg-jdk18on-1.81.jar \
+   /home/aceuser/ace-server/shared-classes/ || error_exit "Failed to copy bcpg JAR"
+log_info "Installed bcpg-jdk18on-1.81.jar"
+
+# Copy bcutil (provides backward compatibility for relocated classes)
+cp /tmp/pgp-supportpac/MQSI_REGISTRY/shared-classes/bcutil-jdk18on-1.81.jar \
+   /home/aceuser/ace-server/shared-classes/ || error_exit "Failed to copy bcutil JAR"
+log_info "Installed bcutil-jdk18on-1.81.jar"
+
+log_info "All BouncyCastle JARs installed to /home/aceuser/ace-server/shared-classes/"
+log_info "Bouncy Castle JARs in shared-classes:"
+ls -la /home/aceuser/ace-server/shared-classes/bc*.jar
 
 # Step 4: Setup test environment
 log_step "Step 4: Setting up test environment..."
@@ -196,6 +211,7 @@ log_step "Step 7: Testing encryption..."
 # Create test input file (matching containerOverrides.properties paths)
 echo "This is a test file for PGP encryption" > /home/aceuser/pgp-test/input/plain.txt
 log_info "Created test input file"
+cat /home/aceuser/pgp-test/input/plain.txt
 
 # Test encryption
 HTTP_CODE=$(curl -X POST http://localhost:7800/pgp/encrypt \
@@ -204,6 +220,8 @@ HTTP_CODE=$(curl -X POST http://localhost:7800/pgp/encrypt \
   -s)
 
 echo "HTTP Status: $HTTP_CODE"
+echo "HTTP Reply:"
+cat /home/aceuser/pgp-test/output/encrypted.txt
 
 if [ "$HTTP_CODE" != "200" ]; then
   log_error "Encryption failed with HTTP $HTTP_CODE"
@@ -226,6 +244,16 @@ fi
 
 log_info "Encryption test passed"
 
+# Wait for encryption to complete and file to be written
+sleep 2
+
+# Verify encrypted file exists before decryption
+if [ ! -f /home/aceuser/pgp-test/output/encrypted.txt ]; then
+  error_exit "Encrypted file not found after encryption"
+fi
+
+log_info "Encrypted file confirmed: $(ls -lh /home/aceuser/pgp-test/output/encrypted.txt)"
+
 # Step 8: Run decryption test
 log_step "Step 8: Testing decryption..."
 
@@ -236,7 +264,10 @@ HTTP_CODE=$(curl -X POST http://localhost:7800/pgp/decrypt \
   -s)
 
 echo "HTTP Status: $HTTP_CODE"
+echo "HTTP Reply:"
+cat /home/aceuser/pgp-test/input/plain-decrypted.txt
 
+# Check if HTTP status is 200
 if [ "$HTTP_CODE" != "200" ]; then
   log_error "Decryption failed with HTTP $HTTP_CODE"
   log_error "Response content:"
@@ -261,12 +292,18 @@ log_info "Decryption test passed"
 # Step 9: Verify results
 log_step "Step 9: Verifying results..."
 
-# Compare files
-if diff /home/aceuser/pgp-test/input/plain.txt \
-        /home/aceuser/pgp-test/input/plain-decrypted.txt > /dev/null 2>&1; then
+# Compare files using pure bash (most portable)
+ORIGINAL=$(cat /home/aceuser/pgp-test/input/plain.txt)
+DECRYPTED=$(cat /home/aceuser/pgp-test/input/plain-decrypted.txt)
+
+if [ "$ORIGINAL" = "$DECRYPTED" ]; then
   log_info "Files match perfectly!"
+  log_info "Content: $ORIGINAL"
 else
-  error_exit "Original and decrypted files do not match"
+  log_error "Original and decrypted files do not match"
+  log_error "Original file content: [$ORIGINAL]"
+  log_error "Decrypted file content: [$DECRYPTED]"
+  error_exit "File comparison failed"
 fi
 
 # Step 10: Display results
