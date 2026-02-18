@@ -17,7 +17,7 @@ echo [OK] Docker is running
 REM Check if IBM Container Registry login is needed
 echo.
 echo [INFO] Checking IBM Container Registry access...
-docker pull icr.io/appc/ace:13.0.6.0-r1 >nul 2>&1
+docker pull cp.icr.io/cp/appc/ace:13.0.6.0-r1 >nul 2>&1
 if errorlevel 1 (
     echo [WARN] Cannot pull ACE image. You may need to login:
     echo   docker login icr.io -u cp -p YOUR_IBM_ENTITLEMENT_KEY
