@@ -178,6 +178,10 @@ When using IBM ACE UBI (Universal Base Image) containers, the Java classloader m
 
 See [testing/docker/README.md](testing/docker/README.md) for more details and current investigation status.
 
+## Support
+
+Need help? Join the community on Discord in the [#pgp-node](https://discord.gg/GGsXSMbgNF) channel.
+
 ## Authors & Contributors
 
 | Name | Role | Date |
@@ -261,6 +265,7 @@ Have ideas for improvements? We'd love to hear from you!
 1. **Open an issue** to discuss new features
 2. **Submit a pull request** with your improvements
 3. **Share your use cases** to help prioritize features
+4. **Join the discussion** on Discord: [#pgp-node](https://discord.gg/GGsXSMbgNF)
 
 ### How to Contribute to Roadmap
 
