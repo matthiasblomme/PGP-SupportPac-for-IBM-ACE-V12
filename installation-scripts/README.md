@@ -7,7 +7,7 @@ This directory contains an automated installation script for the PGP SupportPac 
 ### install-pgp-supportpac.bat (Batch File)
 **Recommended installation method**
 
-A batch file script with similar functionality to the PowerShell version.
+A batch file script that automates the full PGP SupportPac installation.
 
 #### Requirements
 - Windows Command Prompt
@@ -59,23 +59,23 @@ The script creates:
 
 ## What Gets Installed
 
-Both scripts install the following files:
+The script installs the following files:
 
 | Source File | Destination |
 |-------------|-------------|
 | `PGPSupportPacImpl.jar` | `%MQSI_BASE_FILEPATH%\server\jplugin\` |
 | `PGPSupportPac.jar` | `%MQSI_BASE_FILEPATH%\tools\plugins\` |
-| `bcpg-jdk18on-1.78.1.jar` | `%MQSI_REGISTRY%\shared-classes\` |
-| `bcprov-jdk18on-1.78.1.jar` | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcpg-jdk18on-1.81.jar` | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcprov-jdk18on-1.81.jar` | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcutil-jdk18on-1.81.jar` | `%MQSI_REGISTRY%\shared-classes\` |
 
 ---
 
 ## Installation Process
 
-Both scripts follow the same process:
+The script follows this process:
 
 1. **Pre-flight Checks**
-   - Verify PowerShell version (PowerShell script only)
    - Check for administrator privileges
    - Verify all source files exist
    - Detect or validate ACE installation
@@ -86,14 +86,14 @@ Both scripts follow the same process:
    - Warn about existing files that will be overwritten
 
 3. **User Confirmation**
-   - Prompt for confirmation (unless `-Force` or `/force` is used)
+   - Prompt for confirmation (unless `/force` is used)
 
 4. **Backup Existing Files**
    - Create timestamped backup directory
-   - Copy existing files (unless `-SkipBackup` or `/skipbackup` is used)
+   - Copy existing files (unless `/skipbackup` is used)
 
 5. **Copy Files**
-   - Copy all four JAR files to their destinations
+   - Copy all five JAR files to their destinations
    - Verify each copy operation
 
 6. **Verify Installation**
@@ -109,21 +109,6 @@ Both scripts follow the same process:
 ---
 
 ## Troubleshooting
-
-### PowerShell Execution Policy Error
-
-If you get an error like "cannot be loaded because running scripts is disabled":
-
-```powershell
-# Check current policy
-Get-ExecutionPolicy
-
-# Set policy for current user (recommended)
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-
-# Or run with bypass (one-time)
-PowerShell -ExecutionPolicy Bypass -File .\Install-PGPSupportPac.ps1
-```
 
 ### Access Denied Errors
 
@@ -152,7 +137,7 @@ install-pgp-supportpac.bat "C:\Program Files\IBM\ACE\13.0.6.0"
 
 ## Log Files
 
-Both scripts create detailed log files with timestamps:
+The script creates a detailed log file with a timestamp:
 - **Location**: Same directory as the script
 - **Format**: `install-[timestamp].log`
 - **Content**: All operations, errors, and warnings
@@ -180,7 +165,7 @@ xcopy /s /y backup\[timestamp]\shared-classes\* "%MQSI_REGISTRY%\shared-classes\
 
 ## Post-Installation
 
-After running either script:
+After running the script:
 
 1. **Restart ACE Components**
    ```cmd
@@ -218,5 +203,5 @@ For issues or questions:
 
 ---
 
-**Last Updated**: 2026-02-11  
+**Last Updated**: 2026-04-01  
 **Version**: 1.0.0
