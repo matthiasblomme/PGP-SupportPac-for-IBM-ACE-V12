@@ -22,14 +22,15 @@ This guide provides detailed instructions for installing the PGP SupportPac for 
 
 ### What Gets Installed
 
-The installation process copies four JAR files to your ACE installation:
+The installation process copies five JAR files to your ACE installation:
 
 | File | Purpose | Destination |
 |------|---------|-------------|
 | `PGPSupportPacImpl.jar` | Server-side PGP implementation | `%MQSI_BASE_FILEPATH%\server\jplugin\` |
 | `PGPSupportPac.jar` | Toolkit plugin for PGP nodes | `%MQSI_BASE_FILEPATH%\tools\plugins\` |
-| `bcpg-jdk18on-1.78.1.jar` | Bouncy Castle PGP library | `%MQSI_REGISTRY%\shared-classes\` |
-| `bcprov-jdk18on-1.78.1.jar` | Bouncy Castle cryptography provider | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcpg-jdk18on-1.81.jar` | Bouncy Castle PGP library | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcprov-jdk18on-1.81.jar` | Bouncy Castle cryptography provider | `%MQSI_REGISTRY%\shared-classes\` |
+| `bcutil-jdk18on-1.81.jar` | Bouncy Castle utilities | `%MQSI_REGISTRY%\shared-classes\` |
 
 ---
 
@@ -37,9 +38,8 @@ The installation process copies four JAR files to your ACE installation:
 
 ### System Requirements
 - **Operating System**: Windows (tested on Windows Server 2016+, Windows 10+)
-- **IBM ACE Version**: 12.0.9.0 or higher (ACE 13.x testing in progress)
+- **IBM ACE Version**: 12.0.9.0 or higher (ACE 13.0.6.0 tested and validated)
 - **Java**: JDK 8 or higher (included with ACE)
-- **PowerShell**: Version 5.1 or higher (for automated installation)
 
 ### Required Permissions
 - **Administrator privileges** are recommended for installation
@@ -84,49 +84,13 @@ If the ACE Toolkit is open, close it completely before proceeding.
 The automated scripts create backups automatically. For manual installation, consider backing up:
 - `%MQSI_BASE_FILEPATH%\server\jplugin\`
 - `%MQSI_BASE_FILEPATH%\tools\plugins\`
-- `%MQSI_REGISTRY%\shared-classes\`a
+- `%MQSI_REGISTRY%\shared-classes\`
 
 ---
 
 ## Installation Methods
 
 ### Automated Installation (Recommended)
-
-#### Option 1: PowerShell Script
-
-**Basic Installation:**
-```powershell
-cd installation-scripts
-.\Install-PGPSupportPac.ps1
-```
-
-**With Custom ACE Path:**
-```powershell
-.\Install-PGPSupportPac.ps1 -ACEInstallPath "C:\Program Files\IBM\ACE\13.0.6.0"
-```
-
-**Force Installation (No Confirmation):**
-```powershell
-.\Install-PGPSupportPac.ps1 -Force
-```
-
-**Skip Backup:**
-```powershell
-.\Install-PGPSupportPac.ps1 -SkipBackup
-```
-
-**PowerShell Script Features:**
-- ✅ Automatic ACE installation detection
-- ✅ Pre-flight checks (admin rights, file existence)
-- ✅ Automatic backup of existing files
-- ✅ Detailed logging
-- ✅ Post-installation verification
-- ✅ Color-coded output
-- ✅ Rollback capability on failure
-
-#### Option 2: Batch File Script
-
-For environments where PowerShell execution is restricted:
 
 **Basic Installation:**
 ```cmd
@@ -169,26 +133,27 @@ MQSI_REGISTRY=C:\ProgramData\IBM\MQSI
 
 Copy `PGPSupportPacImpl.jar` to the server jplugin directory:
 ```cmd
-copy "MQSI_BASE_FILEPATH\server\jplugin\PGPSupportPacImpl.jar" "%MQSI_BASE_FILEPATH%\server\jplugin\"
+copy "[repo]\MQSI_BASE_FILEPATH\server\jplugin\PGPSupportPacImpl.jar" "%MQSI_BASE_FILEPATH%\server\jplugin\"
 ```
 
 #### Step 3: Copy Toolkit Plugin
 
 Copy `PGPSupportPac.jar` to the tools plugins directory:
 ```cmd
-copy "MQSI_BASE_FILEPATH\tools\plugins\PGPSupportPac.jar" "%MQSI_BASE_FILEPATH%\tools\plugins\"
+copy "[repo]\MQSI_BASE_FILEPATH\tools\plugins\PGPSupportPac.jar" "%MQSI_BASE_FILEPATH%\tools\plugins\"
 ```
 
 #### Step 4: Copy Bouncy Castle Libraries
 
-Copy both Bouncy Castle JAR files to the shared-classes directory:
+Copy all three Bouncy Castle JAR files to the shared-classes directory:
 ```cmd
 REM Create directory if it doesn't exist
 if not exist "%MQSI_REGISTRY%\shared-classes" mkdir "%MQSI_REGISTRY%\shared-classes"
 
 REM Copy libraries
-copy "MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.78.1.jar" "%MQSI_REGISTRY%\shared-classes\"
-copy "MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.78.1.jar" "%MQSI_REGISTRY%\shared-classes\"
+copy "[repo]\MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.81.jar" "%MQSI_REGISTRY%\shared-classes\"
+copy "[repo]\MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.81.jar" "%MQSI_REGISTRY%\shared-classes\"
+copy "[repo]\MQSI_REGISTRY\shared-classes\bcutil-jdk18on-1.81.jar" "%MQSI_REGISTRY%\shared-classes\"
 ```
 
 #### Step 5: Verify Files
@@ -197,8 +162,9 @@ Verify all files were copied successfully:
 ```cmd
 dir "%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar"
 dir "%MQSI_BASE_FILEPATH%\tools\plugins\PGPSupportPac.jar"
-dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar"
-dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.81.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.81.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcutil-jdk18on-1.81.jar"
 ```
 
 ---
@@ -246,8 +212,9 @@ Run this command to check all files are present:
 ```cmd
 dir "%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar" && ^
 dir "%MQSI_BASE_FILEPATH%\tools\plugins\PGPSupportPac.jar" && ^
-dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar" && ^
-dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar" && ^
+dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.81.jar" && ^
+dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.81.jar" && ^
+dir "%MQSI_REGISTRY%\shared-classes\bcutil-jdk18on-1.81.jar" && ^
 echo All files verified successfully!
 ```
 
@@ -273,34 +240,34 @@ The PGP SupportPac includes a command-line tool for managing PGP keys and keysto
 2. Add the required JARs to your CLASSPATH:
    ```cmd
    SET CLASSPATH=%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar;%CLASSPATH%
-   SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar;%CLASSPATH%
-   SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar;%CLASSPATH%
+   SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.81.jar;%CLASSPATH%
+   SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.81.jar;%CLASSPATH%
+   SET CLASSPATH=%MQSI_REGISTRY%\shared-classes\bcutil-jdk18on-1.81.jar;%CLASSPATH%
    ```
 
 ### Common Commands
 
-**List keys in a keystore:**
+**List private keys:**
 ```cmd
-java com.ibm.broker.supportpac.pgp.PGPKeytool -list -keystore mykeys.pgp
+java pgpkeytool listPrivateKeys -sr C:\keys\private-repository.pgp
 ```
 
-**Generate a new key pair:**
+**Generate a key pair:**
 ```cmd
-java com.ibm.broker.supportpac.pgp.PGPKeytool -genkey -alias mykey -keystore mykeys.pgp
+java pgpkeytool generatePGPKeyPair -i "User <user@example.com>" -s C:\keys\private.asc -o C:\keys\public.asc
 ```
 
-**Export a public key:**
+**Encrypt a file:**
 ```cmd
-java com.ibm.broker.supportpac.pgp.PGPKeytool -export -alias mykey -keystore mykeys.pgp -file publickey.asc
+java pgpkeytool encrypt -i C:\data\plaintext.txt -o C:\data\encrypted.pgp -pr C:\keys\public-repository.pgp -r "Recipient <recipient@example.com>"
 ```
 
-**Import a public key:**
+**Decrypt a file:**
 ```cmd
-java com.ibm.broker.supportpac.pgp.PGPKeytool -import -alias theirkey -keystore mykeys.pgp -file theirpublickey.asc
+java pgpkeytool decrypt -i C:\data\encrypted.pgp -o C:\data\decrypted.txt -sr C:\keys\private-repository.pgp -p mypassphrase
 ```
 
-For detailed pgpKeytool usage, refer to:
-- [PGP SupportPac User Guide](https://github.com/dipakpal/MyOpenTech-PGP-SupportPac/blob/master/docs/PGP%20Security%20Implementation%20in%20IBM%20Integration%20Bus%20v10%20Part-1%20PGP%20SupportPac%20User%20Guide.pdf)
+For the full command reference, see [PGPKEYTOOL-COMMANDS.md](PGPKEYTOOL-COMMANDS.md).
 
 ---
 
@@ -317,8 +284,8 @@ For detailed pgpKeytool usage, refer to:
 **Solution:**
 - Verify ACE is installed: Check for `ace.cmd` in `C:\Program Files\IBM\ACE\[version]\`
 - Specify the path explicitly:
-  ```powershell
-  .\Install-PGPSupportPac.ps1 -ACEInstallPath "C:\Program Files\IBM\ACE\13.0.6.0"
+  ```cmd
+  install-pgp-supportpac.bat "C:\Program Files\IBM\ACE\13.0.6.0"
   ```
 
 #### Problem: MQSI_REGISTRY Not Set
@@ -339,15 +306,16 @@ For detailed pgpKeytool usage, refer to:
 
 #### Problem: ClassNotFoundException at Runtime
 **Solution:**
-1. Verify all four JAR files are installed correctly
+1. Verify all five JAR files are installed correctly
 2. Restart the Integration Server
 3. Check Integration Server logs for detailed error messages
 
 #### Problem: "Algorithm Not Found" Error
 **Solution:**
-- Ensure both Bouncy Castle JARs are in `%MQSI_REGISTRY%\shared-classes\`:
-  - `bcpg-jdk18on-1.78.1.jar`
-  - `bcprov-jdk18on-1.78.1.jar`
+- Ensure all three Bouncy Castle JARs are in `%MQSI_REGISTRY%\shared-classes\`:
+  - `bcpg-jdk18on-1.81.jar`
+  - `bcprov-jdk18on-1.81.jar`
+  - `bcutil-jdk18on-1.81.jar`
 
 ### Verification Commands
 
@@ -355,8 +323,9 @@ For detailed pgpKeytool usage, refer to:
 ```cmd
 dir "%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar"
 dir "%MQSI_BASE_FILEPATH%\tools\plugins\PGPSupportPac.jar"
-dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar"
-dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.81.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.81.jar"
+dir "%MQSI_REGISTRY%\shared-classes\bcutil-jdk18on-1.81.jar"
 ```
 
 **Check Integration Server logs:**
@@ -390,8 +359,9 @@ If you used the automated installation and have a backup:
    ```cmd
    del "%MQSI_BASE_FILEPATH%\server\jplugin\PGPSupportPacImpl.jar"
    del "%MQSI_BASE_FILEPATH%\tools\plugins\PGPSupportPac.jar"
-   del "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.78.1.jar"
-   del "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.78.1.jar"
+   del "%MQSI_REGISTRY%\shared-classes\bcpg-jdk18on-1.81.jar"
+   del "%MQSI_REGISTRY%\shared-classes\bcprov-jdk18on-1.81.jar"
+   del "%MQSI_REGISTRY%\shared-classes\bcutil-jdk18on-1.81.jar"
    ```
 3. Restart ACE components
 
@@ -400,33 +370,14 @@ If you used the automated installation and have a backup:
 ## ACE 13.x Compatibility Notes
 
 ### Current Status
-- **Officially Tested**: ACE 12.0.9.0 through 12.0.12.5
-- **ACE 13.x**: Testing in progress
+- **Officially Tested**: ACE 12.0.9.0 through 12.0.12.5 and ACE 13.0.6.0
+- **ACE 13.0.6.0**: Tested and validated (2026-02-12) — see [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md)
 
-### Known Considerations for ACE 13.x
+### Notes for ACE 13.x
 
-1. **Java Version**: ACE 13.x may use a different Java version. The Bouncy Castle libraries (1.78.1) are compatible with JDK 8+.
+1. **Java Version**: The Bouncy Castle libraries (1.81) are compatible with JDK 8+.
 
-2. **Installation Paths**: ACE 13.x follows the same directory structure as ACE 12.x, so installation should work identically.
-
-3. **API Changes**: If IBM made breaking changes to the plugin API in ACE 13.x, the PGP nodes may not function correctly.
-
-### Testing Recommendations
-
-If you're installing on ACE 13.x:
-
-1. **Test in a non-production environment first**
-2. **Verify basic functionality**:
-   - PGP nodes appear in Toolkit
-   - Simple encryption/decryption flows work
-   - Key management operations function correctly
-
-3. **Report Results**:
-   - If successful, please report to the project maintainers
-   - If issues occur, provide:
-     - ACE version (exact build number)
-     - Error messages from logs
-     - Steps to reproduce
+2. **Installation Paths**: ACE 13.x follows the same directory structure as ACE 12.x, so installation works identically.
 
 ### Rollback Plan
 
@@ -454,5 +405,5 @@ For issues or questions:
 
 ---
 
-**Last Updated**: 2026-02-11  
+**Last Updated**: 2026-04-01  
 **Version**: 1.0.0
