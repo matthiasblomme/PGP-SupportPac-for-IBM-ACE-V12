@@ -46,6 +46,7 @@ Based on compiled code from [MyOpenTech-PGP-SupportPac](https://github.com/matth
 | 12.0.11.3 | ✅ Tested and validated | 2024-05-01 | |
 | 12.0.12.5 | ✅ Tested and validated | 2024-10-24 | |
 | 13.0.6.0 | ✅ Tested and validated | 2026-02-12 | See [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md) |
+| 13.0.7.0 | ✅ Tested and validated | 2026-04-02 | |
 
 ## What's Included
 
@@ -178,6 +179,10 @@ When using IBM ACE UBI (Universal Base Image) containers, the Java classloader m
 
 See [testing/docker/README.md](testing/docker/README.md) for more details and current investigation status.
 
+## Support
+
+Need help? Join the community on Discord in the [#pgp-node](https://discord.gg/GGsXSMbgNF) channel.
+
 ## Authors & Contributors
 
 | Name | Role | Date |
@@ -261,6 +266,7 @@ Have ideas for improvements? We'd love to hear from you!
 1. **Open an issue** to discuss new features
 2. **Submit a pull request** with your improvements
 3. **Share your use cases** to help prioritize features
+4. **Join the discussion** on Discord: [#pgp-node](https://discord.gg/GGsXSMbgNF)
 
 ### How to Contribute to Roadmap
 
