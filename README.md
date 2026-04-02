@@ -46,7 +46,7 @@ Based on compiled code from [MyOpenTech-PGP-SupportPac](https://github.com/matth
 | 12.0.11.3 | ✅ Tested and validated | 2024-05-01 | |
 | 12.0.12.5 | ✅ Tested and validated | 2024-10-24 | |
 | 13.0.6.0 | ✅ Tested and validated | 2026-02-12 | See [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md) |
-| 13.0.7.0 | 🔄 Testing in progress | 2026-04-01 | |
+| 13.0.7.0 | ✅ Tested and validated | 2026-04-02 | |
 
 ## What's Included
 
