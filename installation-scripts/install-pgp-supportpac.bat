@@ -33,16 +33,17 @@ set TIMESTAMP=%TIMESTAMP: =0%
 set LOG_FILE=%SCRIPT_DIR%install-%TIMESTAMP%.log
 
 REM Parse command line arguments
-set ACE_INSTALL_PATH=%~1
+set ACE_INSTALL_PATH=
 set SKIP_BACKUP=0
 set FORCE_INSTALL=0
 
 :parse_args
 if "%~1"=="" goto args_done
-if /i "%~1"=="/skipbackup" set SKIP_BACKUP=1
-if /i "%~1"=="/force" set FORCE_INSTALL=1
-if /i "%~1"=="-skipbackup" set SKIP_BACKUP=1
-if /i "%~1"=="-force" set FORCE_INSTALL=1
+if /i "%~1"=="/skipbackup" (set SKIP_BACKUP=1 & shift & goto parse_args)
+if /i "%~1"=="-skipbackup" (set SKIP_BACKUP=1 & shift & goto parse_args)
+if /i "%~1"=="/force" (set FORCE_INSTALL=1 & shift & goto parse_args)
+if /i "%~1"=="-force" (set FORCE_INSTALL=1 & shift & goto parse_args)
+set ACE_INSTALL_PATH=%~1
 shift
 goto parse_args
 :args_done
@@ -172,8 +173,8 @@ if defined ACE_INSTALL_PATH (
     ) do (
         if exist %%P (
             for /f "delims=" %%V in ('dir /b /ad /o-n %%P 2^>nul') do (
-                if exist "%%P\%%V\ace.cmd" (
-                    set MQSI_BASE_FILEPATH=%%P\%%V
+                if exist "%%~P\%%V\ace.cmd" (
+                    set MQSI_BASE_FILEPATH=%%~P\%%V
                     goto ace_found
                 )
             )
