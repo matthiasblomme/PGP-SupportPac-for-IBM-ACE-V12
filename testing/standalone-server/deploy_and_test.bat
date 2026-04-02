@@ -1,9 +1,9 @@
 @echo off
 REM ============================================================================
-REM PGP SupportPac - Complete Deployment and Test Script for ACE 13.0.6.0
+REM PGP SupportPac - Complete Deployment and Test Script for ACE 13.0.7.0
 REM ============================================================================
 REM This script performs a complete setup, deployment, and test of the PGP
-REM SupportPac for IBM ACE 13.0.6.0
+REM SupportPac for IBM ACE 13.0.7.0
 REM ============================================================================
 
 setlocal enabledelayedexpansion
@@ -13,7 +13,7 @@ set SCRIPT_DIR=%~dp0
 set PROJECT_ROOT=%SCRIPT_DIR%..\..
 set TEST_RESOURCES=%PROJECT_ROOT%\testing\test-resources
 set SOURCES_DIR=%TEST_RESOURCES%\Sources
-set ACE_VERSION=13.0.6.0
+set ACE_VERSION=13.0.7.0
 set ACE_HOME=C:\Program Files\IBM\ACE\%ACE_VERSION%
 set SERVER_NAME=TEST_SERVER_PGP
 set SERVER_WORK_DIR=C:\temp\pgp\%SERVER_NAME%
@@ -36,19 +36,31 @@ echo   Sources: %SOURCES_DIR%
 echo.
 
 REM ============================================================================
-REM Step 1: Setup Test Directories
+REM Step 1: Install PGP SupportPac (force clean install before testing)
 REM ============================================================================
-echo [Step 1/10] Setting up test directories...
+echo [Step 1/11] Installing PGP SupportPac...
+call "%PROJECT_ROOT%\installation-scripts\install-pgp-supportpac.bat" /force /skipbackup
+if errorlevel 1 (
+    echo [ERROR] PGP SupportPac installation failed
+    goto :error_exit
+)
+echo [OK] PGP SupportPac installed
+echo.
+
+REM ============================================================================
+REM Step 2: Setup Test Directories
+REM ============================================================================
+echo [Step 2/11] Setting up test directories...
 if not exist "%TEST_DIR%\keys" mkdir "%TEST_DIR%\keys"
 if not exist "%TEST_DIR%\input" mkdir "%TEST_DIR%\input"
 if not exist "%TEST_DIR%\output" mkdir "%TEST_DIR%\output"
 echo [OK] Test directories created
 
 REM ============================================================================
-REM Step 2: Copy PGP Keys to Test Directory
+REM Step 3: Copy PGP Keys to Test Directory
 REM ============================================================================
 echo.
-echo [Step 2/10] Copying PGP keys to test directory...
+echo [Step 3/11] Copying PGP keys to test directory...
 xcopy /Y /Q "%SOURCES_DIR%\pgp-keys\*.*" "%TEST_DIR%\keys\" >nul
 if errorlevel 1 (
     echo [ERROR] Failed to copy PGP keys
@@ -60,7 +72,7 @@ REM ============================================================================
 REM Step 4: Clean Up Old Server Directory
 REM ============================================================================
 echo.
-echo [Step 4/10] Cleaning up old server directory...
+echo [Step 4/11] Cleaning up old server directory...
 if exist "%SERVER_WORK_DIR%" (
     rmdir /S /Q "%SERVER_WORK_DIR%"
     echo [OK] Old server directory removed
@@ -76,7 +88,7 @@ REM ============================================================================
 REM Step 5: Copy Bouncy Castle JARs to Server
 REM ============================================================================
 echo.
-echo [Step 5/10] Copying Bouncy Castle JARs to server...
+echo [Step 5/11] Copying Bouncy Castle JARs to server...
 copy /Y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.81.jar" "%SERVER_WORK_DIR%\shared-classes\" >nul
 copy /Y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.81.jar" "%SERVER_WORK_DIR%\shared-classes\" >nul
 if errorlevel 1 (
@@ -90,7 +102,7 @@ REM ============================================================================
 REM Step 6: Deploy Policy Project and Application (MUST BE DONE BEFORE STARTING SERVER)
 REM ============================================================================
 echo.
-echo [Step 6/10] Deploying PGP_Policies and TestPGP_App...
+echo [Step 6/11] Deploying PGP_Policies and TestPGP_App...
 
 ibmint deploy --input-path "%SOURCES_DIR%" --output-work-directory "%SERVER_WORK_DIR%" --project PGP_Policies
 ibmint deploy --input-path "%SOURCES_DIR%" --output-work-directory "%SERVER_WORK_DIR%" --project TestPGP_App
@@ -105,7 +117,7 @@ REM ============================================================================
 REM Step 7: Start Integration Server
 REM ============================================================================
 echo.
-echo [Step 7/10] Starting integration server...
+echo [Step 7/11] Starting integration server...
 echo [INFO] Server will start in a new window titled "TEST_SERVER_PGP"
 start "TEST_SERVER_PGP" IntegrationServer --work-dir "%SERVER_WORK_DIR%"
 
@@ -133,7 +145,7 @@ REM ============================================================================
 REM Step 8: Verify HTTP Listener is Active
 REM ============================================================================
 echo.
-echo [Step 8/10] Verifying HTTP listener on port %HTTP_PORT%...
+echo [Step 8/11] Verifying HTTP listener on port %HTTP_PORT%...
 netstat -ano | findstr ":%HTTP_PORT%" | findstr "LISTENING" >nul
 if errorlevel 1 (
     echo [WARNING] HTTP listener not found on port %HTTP_PORT%
@@ -151,7 +163,7 @@ REM ============================================================================
 REM Step 9: Create Test Input File
 REM ============================================================================
 echo.
-echo [Step 9/10] Creating test input file...
+echo [Step 9/11] Creating test input file...
 echo This is a test file for PGP encryption > "%TEST_DIR%\input\plain.txt"
 echo [OK] Test file created: %TEST_DIR%\input\plain.txt
 
@@ -159,7 +171,7 @@ REM ============================================================================
 REM Step 10: Test Encryption and Decryption
 REM ============================================================================
 echo.
-echo [Step 10/10] Testing PGP encryption and decryption...
+echo [Step 10/11] Testing PGP encryption and decryption...
 echo.
 echo [TEST 1] Testing encryption flow...
 curl -X POST http://localhost:%HTTP_PORT%/pgp/encrypt -o "%TEST_DIR%\output\encrypted.txt"
@@ -181,9 +193,10 @@ if errorlevel 1 (
 echo [OK] Decryption test completed
 
 REM ============================================================================
-REM Verify Results
+REM Step 11: Verify Results
 REM ============================================================================
 echo.
+echo [Step 11/11] Verifying results...
 echo ============================================================================
 echo Test Results
 echo ============================================================================

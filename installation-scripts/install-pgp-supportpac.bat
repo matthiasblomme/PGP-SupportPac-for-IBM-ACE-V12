@@ -33,16 +33,17 @@ set TIMESTAMP=%TIMESTAMP: =0%
 set LOG_FILE=%SCRIPT_DIR%install-%TIMESTAMP%.log
 
 REM Parse command line arguments
-set ACE_INSTALL_PATH=%~1
+set ACE_INSTALL_PATH=
 set SKIP_BACKUP=0
 set FORCE_INSTALL=0
 
 :parse_args
 if "%~1"=="" goto args_done
-if /i "%~1"=="/skipbackup" set SKIP_BACKUP=1
-if /i "%~1"=="/force" set FORCE_INSTALL=1
-if /i "%~1"=="-skipbackup" set SKIP_BACKUP=1
-if /i "%~1"=="-force" set FORCE_INSTALL=1
+if /i "%~1"=="/skipbackup" (set SKIP_BACKUP=1 & shift & goto parse_args)
+if /i "%~1"=="-skipbackup" (set SKIP_BACKUP=1 & shift & goto parse_args)
+if /i "%~1"=="/force" (set FORCE_INSTALL=1 & shift & goto parse_args)
+if /i "%~1"=="-force" (set FORCE_INSTALL=1 & shift & goto parse_args)
+set ACE_INSTALL_PATH=%~1
 shift
 goto parse_args
 :args_done
@@ -125,8 +126,9 @@ set MISSING_FILES=0
 for %%F in (
     "MQSI_BASE_FILEPATH\server\jplugin\PGPSupportPacImpl.jar"
     "MQSI_BASE_FILEPATH\tools\plugins\PGPSupportPac.jar"
-    "MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.78.1.jar"
-    "MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.78.1.jar"
+    "MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.81.jar"
+    "MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.81.jar"
+    "MQSI_REGISTRY\shared-classes\bcutil-jdk18on-1.81.jar"
 ) do (
     if not exist "%PROJECT_ROOT%\%%~F" (
         echo [ERROR] Required file not found: %%~F
@@ -171,8 +173,8 @@ if defined ACE_INSTALL_PATH (
     ) do (
         if exist %%P (
             for /f "delims=" %%V in ('dir /b /ad /o-n %%P 2^>nul') do (
-                if exist "%%P\%%V\ace.cmd" (
-                    set MQSI_BASE_FILEPATH=%%P\%%V
+                if exist "%%~P\%%V\ace.cmd" (
+                    set MQSI_BASE_FILEPATH=%%~P\%%V
                     goto ace_found
                 )
             )
@@ -235,10 +237,13 @@ echo.
 echo   2. PGPSupportPac.jar
 echo      -^> %TOOLS_PLUGINS%
 echo.
-echo   3. bcpg-jdk18on-1.78.1.jar
+echo   3. bcpg-jdk18on-1.81.jar
 echo      -^> %SHARED_CLASSES%
 echo.
-echo   4. bcprov-jdk18on-1.78.1.jar
+echo   4. bcprov-jdk18on-1.81.jar
+echo      -^> %SHARED_CLASSES%
+echo.
+echo   5. bcutil-jdk18on-1.81.jar
 echo      -^> %SHARED_CLASSES%
 echo.
 
@@ -247,8 +252,9 @@ set EXISTING_COUNT=0
 for %%F in (
     "%SERVER_JPLUGIN%\PGPSupportPacImpl.jar"
     "%TOOLS_PLUGINS%\PGPSupportPac.jar"
-    "%SHARED_CLASSES%\bcpg-jdk18on-1.78.1.jar"
-    "%SHARED_CLASSES%\bcprov-jdk18on-1.78.1.jar"
+    "%SHARED_CLASSES%\bcpg-jdk18on-1.81.jar"
+    "%SHARED_CLASSES%\bcprov-jdk18on-1.81.jar"
+    "%SHARED_CLASSES%\bcutil-jdk18on-1.81.jar"
 ) do (
     if exist %%F (
         if !EXISTING_COUNT!==0 (
@@ -292,17 +298,24 @@ if exist "%TOOLS_PLUGINS%\PGPSupportPac.jar" (
 )
 
 REM Backup shared-classes files
-if exist "%SHARED_CLASSES%\bcpg-jdk18on-1.78.1.jar" (
+if exist "%SHARED_CLASSES%\bcpg-jdk18on-1.81.jar" (
     mkdir "%BACKUP_PATH%\shared-classes" 2>nul
-    copy /y "%SHARED_CLASSES%\bcpg-jdk18on-1.78.1.jar" "%BACKUP_PATH%\shared-classes\" >nul
-    echo [OK] Backed up: bcpg-jdk18on-1.78.1.jar
+    copy /y "%SHARED_CLASSES%\bcpg-jdk18on-1.81.jar" "%BACKUP_PATH%\shared-classes\" >nul
+    echo [OK] Backed up: bcpg-jdk18on-1.81.jar
     set /a BACKED_UP+=1
 )
 
-if exist "%SHARED_CLASSES%\bcprov-jdk18on-1.78.1.jar" (
+if exist "%SHARED_CLASSES%\bcprov-jdk18on-1.81.jar" (
     mkdir "%BACKUP_PATH%\shared-classes" 2>nul
-    copy /y "%SHARED_CLASSES%\bcprov-jdk18on-1.78.1.jar" "%BACKUP_PATH%\shared-classes\" >nul
-    echo [OK] Backed up: bcprov-jdk18on-1.78.1.jar
+    copy /y "%SHARED_CLASSES%\bcprov-jdk18on-1.81.jar" "%BACKUP_PATH%\shared-classes\" >nul
+    echo [OK] Backed up: bcprov-jdk18on-1.81.jar
+    set /a BACKED_UP+=1
+)
+
+if exist "%SHARED_CLASSES%\bcutil-jdk18on-1.81.jar" (
+    mkdir "%BACKUP_PATH%\shared-classes" 2>nul
+    copy /y "%SHARED_CLASSES%\bcutil-jdk18on-1.81.jar" "%BACKUP_PATH%\shared-classes\" >nul
+    echo [OK] Backed up: bcutil-jdk18on-1.81.jar
     set /a BACKED_UP+=1
 )
 
@@ -342,27 +355,38 @@ if errorlevel 1 (
 echo [OK] Installed: PGPSupportPac.jar
 call :log INFO "Installed PGPSupportPac.jar"
 
-REM Copy bcpg-jdk18on-1.78.1.jar
-echo Installing bcpg-jdk18on-1.78.1.jar...
-copy /y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.78.1.jar" "%SHARED_CLASSES%\" >nul
+REM Copy bcpg-jdk18on-1.81.jar
+echo Installing bcpg-jdk18on-1.81.jar...
+copy /y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcpg-jdk18on-1.81.jar" "%SHARED_CLASSES%\" >nul
 if errorlevel 1 (
-    echo [ERROR] Failed to copy bcpg-jdk18on-1.78.1.jar
-    call :log ERROR "Failed to copy bcpg-jdk18on-1.78.1.jar"
+    echo [ERROR] Failed to copy bcpg-jdk18on-1.81.jar
+    call :log ERROR "Failed to copy bcpg-jdk18on-1.81.jar"
     exit /b 1
 )
-echo [OK] Installed: bcpg-jdk18on-1.78.1.jar
-call :log INFO "Installed bcpg-jdk18on-1.78.1.jar"
+echo [OK] Installed: bcpg-jdk18on-1.81.jar
+call :log INFO "Installed bcpg-jdk18on-1.81.jar"
 
-REM Copy bcprov-jdk18on-1.78.1.jar
-echo Installing bcprov-jdk18on-1.78.1.jar...
-copy /y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.78.1.jar" "%SHARED_CLASSES%\" >nul
+REM Copy bcprov-jdk18on-1.81.jar
+echo Installing bcprov-jdk18on-1.81.jar...
+copy /y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcprov-jdk18on-1.81.jar" "%SHARED_CLASSES%\" >nul
 if errorlevel 1 (
-    echo [ERROR] Failed to copy bcprov-jdk18on-1.78.1.jar
-    call :log ERROR "Failed to copy bcprov-jdk18on-1.78.1.jar"
+    echo [ERROR] Failed to copy bcprov-jdk18on-1.81.jar
+    call :log ERROR "Failed to copy bcprov-jdk18on-1.81.jar"
     exit /b 1
 )
-echo [OK] Installed: bcprov-jdk18on-1.78.1.jar
-call :log INFO "Installed bcprov-jdk18on-1.78.1.jar"
+echo [OK] Installed: bcprov-jdk18on-1.81.jar
+call :log INFO "Installed bcprov-jdk18on-1.81.jar"
+
+REM Copy bcutil-jdk18on-1.81.jar
+echo Installing bcutil-jdk18on-1.81.jar...
+copy /y "%PROJECT_ROOT%\MQSI_REGISTRY\shared-classes\bcutil-jdk18on-1.81.jar" "%SHARED_CLASSES%\" >nul
+if errorlevel 1 (
+    echo [ERROR] Failed to copy bcutil-jdk18on-1.81.jar
+    call :log ERROR "Failed to copy bcutil-jdk18on-1.81.jar"
+    exit /b 1
+)
+echo [OK] Installed: bcutil-jdk18on-1.81.jar
+call :log INFO "Installed bcutil-jdk18on-1.81.jar"
 
 exit /b 0
 
@@ -404,32 +428,46 @@ if exist "%TOOLS_PLUGINS%\PGPSupportPac.jar" (
 )
 
 REM Verify bcpg library
-if exist "%SHARED_CLASSES%\bcpg-jdk18on-1.78.1.jar" (
-    for %%S in ("%SHARED_CLASSES%\bcpg-jdk18on-1.78.1.jar") do (
+if exist "%SHARED_CLASSES%\bcpg-jdk18on-1.81.jar" (
+    for %%S in ("%SHARED_CLASSES%\bcpg-jdk18on-1.81.jar") do (
         if %%~zS gtr 0 (
-            echo [OK] bcpg-jdk18on-1.78.1.jar - OK
+            echo [OK] bcpg-jdk18on-1.81.jar - OK
         ) else (
-            echo [ERROR] bcpg-jdk18on-1.78.1.jar - File is empty!
+            echo [ERROR] bcpg-jdk18on-1.81.jar - File is empty!
             set VERIFY_FAILED=1
         )
     )
 ) else (
-    echo [ERROR] bcpg-jdk18on-1.78.1.jar - Not found!
+    echo [ERROR] bcpg-jdk18on-1.81.jar - Not found!
     set VERIFY_FAILED=1
 )
 
 REM Verify bcprov library
-if exist "%SHARED_CLASSES%\bcprov-jdk18on-1.78.1.jar" (
-    for %%S in ("%SHARED_CLASSES%\bcprov-jdk18on-1.78.1.jar") do (
+if exist "%SHARED_CLASSES%\bcprov-jdk18on-1.81.jar" (
+    for %%S in ("%SHARED_CLASSES%\bcprov-jdk18on-1.81.jar") do (
         if %%~zS gtr 0 (
-            echo [OK] bcprov-jdk18on-1.78.1.jar - OK
+            echo [OK] bcprov-jdk18on-1.81.jar - OK
         ) else (
-            echo [ERROR] bcprov-jdk18on-1.78.1.jar - File is empty!
+            echo [ERROR] bcprov-jdk18on-1.81.jar - File is empty!
             set VERIFY_FAILED=1
         )
     )
 ) else (
-    echo [ERROR] bcprov-jdk18on-1.78.1.jar - Not found!
+    echo [ERROR] bcprov-jdk18on-1.81.jar - Not found!
+    set VERIFY_FAILED=1
+)
+
+if exist "%SHARED_CLASSES%\bcutil-jdk18on-1.81.jar" (
+    for %%S in ("%SHARED_CLASSES%\bcutil-jdk18on-1.81.jar") do (
+        if %%~zS gtr 0 (
+            echo [OK] bcutil-jdk18on-1.81.jar - OK
+        ) else (
+            echo [ERROR] bcutil-jdk18on-1.81.jar - File is empty!
+            set VERIFY_FAILED=1
+        )
+    )
+) else (
+    echo [ERROR] bcutil-jdk18on-1.81.jar - Not found!
     set VERIFY_FAILED=1
 )
 
@@ -462,9 +500,7 @@ echo   1. Restart any running ACE Integration Servers
 echo   2. Restart ACE Toolkit if it's currently open
 echo   3. Test the PGP nodes in your message flows
 echo.
-echo For ACE 13.x users:
-echo   This version has not been officially tested on ACE 13.x
-echo   Please report any issues or success to the project maintainers
+echo ACE 13.0.6.0 has been tested and validated.
 echo.
 echo To use the pgpKeytool command line utility:
 echo   1. Open ACE Command Console

@@ -4,7 +4,7 @@ REM Run Standalone Server Test with ACE Environment
 REM ============================================================================
 
 echo Sourcing ACE environment...
-call "C:\Program Files\IBM\ACE\13.0.6.0\server\bin\mqsiprofile.cmd"
+call "C:\Program Files\IBM\ACE\13.0.7.0\server\bin\mqsiprofile.cmd"
 
 if errorlevel 1 (
     echo [ERROR] Failed to source ACE environment
