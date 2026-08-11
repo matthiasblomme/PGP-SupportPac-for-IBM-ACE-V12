@@ -17,9 +17,15 @@ This directory contains everything needed to test the PGP SupportPac in Docker c
 
 2. **Run the tests:**
    ```cmd
-   cd docker-testing
-   test-docker-local.bat
+   cd testing\docker
+   docker compose up -d
+   docker logs -f ace-pgp-test
    ```
+
+   `test-docker-local.bat` runs the same thing with `--abort-on-container-exit`.
+   Note that `run-tests.sh` ends with `tail -f /dev/null` to keep the container
+   alive for inspection, so on success that command streams logs indefinitely
+   instead of returning - watch for `ALL TESTS PASSED` and press Ctrl+C.
 
 That's it! The script will:
 - Pull the ACE Docker image
@@ -141,9 +147,63 @@ Located in `Test Project/Sources/Deploymentdescriptors/`:
 
 ## Known Issues
 
-### ⚠️ UBI Image Classloader Issue (Work in Progress)
+### Call-home placeholder blocks startup on ACE 13.0.8 images
 
-**Status:** Under investigation
+**Issue:** On `13.0.8.x` images the integration server refuses to start:
+
+```
+BIP2203E: An integration server has encountered a problem whilst starting.
+BIP15366W: Unable to start integration server. The integration server requires a company name supplied to start.
+```
+
+The cause is call-home (anonymous usage statistics), which the image ships **enabled
+with an unreplaced placeholder** in `/var/mqsi/registry.13.0.conf.yaml`:
+
+```yaml
+---
+CallHome:
+  companyName: 'REPLACE_ME_COMPANY_NAME'
+  enabled: true
+```
+
+The company name is only used for that anonymous feedback. Since this test harness does
+not send usage statistics, `run-tests.sh` turns call-home off rather than inventing a
+company name:
+
+```yaml
+CallHome:
+  enabled: false
+```
+
+This is the same setting a configured Windows install carries in
+`C:\ProgramData\IBM\MQSI\registry.13.0.conf.yaml`, which is why standalone and
+node-managed testing never hits this. Images 13.0.6 and 13.0.7 have no such check, so
+the step is harmless on older tags.
+
+**Note:** `ibmint modify installation --disable-usage-statistics` exits 0 but does *not*
+clear the requirement on its own - verified on `13.0.8.1-r1`. Only the `enabled: false`
+config above let the server reach `BIP1991I`.
+
+### Shell script line endings on Windows clones
+
+`scripts/run-tests.sh` is mounted straight from the working tree into the container.
+With `core.autocrlf=true` a Windows checkout rewrites it to CRLF and bash fails with:
+
+```
+/tmp/run-tests.sh: line 3: $'\r': command not found
+/tmp/run-tests.sh: line 17: syntax error near unexpected token `$'{\r''
+```
+
+The repository `.gitattributes` pins `*.sh` to `eol=lf` to prevent this. If you cloned
+before that file existed, refresh the working copy:
+
+```cmd
+git rm --cached -r . & git reset --hard
+```
+
+### ⚠️ UBI Image Classloader Issue
+
+**Status:** Not reproduced on `13.0.8.1-r1` (2026-08-11).
 
 **Issue:** When using IBM ACE UBI (Universal Base Image) containers, the Java classloader behaves differently and may load older encryption JARs from the base image instead of the Bouncy Castle 1.81 JARs we provide.
 
@@ -152,14 +212,17 @@ Located in `Test Project/Sources/Deploymentdescriptors/`:
 - Wrong version of Bouncy Castle libraries being used
 - Inconsistent behavior between local and container environments
 
-**Current Workaround:**
-- Use non-UBI ACE images if available
-- Manually verify JAR versions in container: `docker exec ace-pgp-test ls -la /home/aceuser/ace-server/shared-classes/`
+**13.0.8.1-r1 observation:** the base image ships Bouncy Castle 1.84
+(`server/webservices/prereqs/bcprov-jdk18on-1.84.jar`, `bcutil`, `bcpkix`) and
+unversioned copies under `server/MQ/lib`, but no `bcpg`. The JARs in the integration
+server `shared-classes` directory won the classpath: the encrypted output reported
+`Version: BCPG v1.81`, the round trip matched, and the server log contained no errors.
 
-**Investigation Status:**
-- Classloader hierarchy differences in UBI images
-- Potential conflicts with base image encryption libraries
-- Testing alternative JAR placement strategies
+**Verification:**
+```cmd
+docker exec ace-pgp-test ls -la /home/aceuser/ace-server/shared-classes/
+docker logs ace-pgp-test | findstr "BCPG"
+```
 
 This issue does not affect standalone server or node-managed server deployments.
 
@@ -193,9 +256,10 @@ docker exec -it ace-pgp-test bash
 Edit `test-docker-local.bat` and change the cleanup prompt behavior.
 
 ### Use Different ACE Version
-Edit `docker-compose.yml` and change the image tag:
-```yaml
-image: icr.io/appc/ace:12.0.12.5-r1
+The image tag comes from `ACE_IMAGE_TAG` and defaults to `13.0.8.1-r1`:
+```cmd
+set ACE_IMAGE_TAG=13.0.7.0-r1
+docker compose up -d
 ```
 
 ### Run Tests Manually
@@ -227,5 +291,6 @@ For issues or questions:
 
 ---
 
-**Last Updated:** 2026-02-13  
+**Last Updated:** 2026-08-11  
+**Last Tested:** ACE 13.0.8.1-r1 - all tests passing  
 **Version:** 1.0.0

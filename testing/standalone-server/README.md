@@ -7,14 +7,14 @@ Test the PGP SupportPac on a local Windows system with IBM ACE installed.
 This testing approach uses a Standalone Integration Server (SIS) running directly on Windows. It provides the most production-like testing environment for Windows deployments.
 
 **Status:** ✅ Fully Implemented and Tested  
-**Last Tested:** 2026-02-12  
-**ACE Version:** 13.0.6.0
+**Last Tested:** 2026-08-11  
+**ACE Version:** 13.0.8.1
 
 ## Quick Start
 
 ### Prerequisites
 
-- ✅ IBM ACE 13.0.6.0 installed on Windows
+- ✅ IBM ACE 13.0.8.1 installed on Windows (or set `ACE_VERSION` to another installed version)
 - ✅ PGP SupportPac installed (see [Installation Guide](../../INSTALLATION.md))
 - ✅ Administrator privileges (recommended)
 - ✅ Command Prompt or PowerShell
@@ -23,7 +23,19 @@ This testing approach uses a Standalone Integration Server (SIS) running directl
 
 ```cmd
 cd testing\standalone-server
-deploy_and_test.bat
+run-test-with-ace-env.bat
+```
+
+`run-test-with-ace-env.bat` sources `mqsiprofile.cmd` (so `ibmint` and
+`IntegrationServer` are on the PATH) and then calls `deploy_and_test.bat`.
+Call `deploy_and_test.bat` directly only from an ACE Command Console, where the
+environment is already set up.
+
+To test a different installed ACE version:
+
+```cmd
+set ACE_VERSION=13.0.7.0
+run-test-with-ace-env.bat
 ```
 
 **Time:** ~10-15 minutes
@@ -126,7 +138,7 @@ The walkthrough includes:
 
 **Configuration Variables:**
 ```batch
-ACE_VERSION=13.0.6.0
+ACE_VERSION=13.0.8.1        REM override by setting ACE_VERSION before calling
 SERVER_NAME=TEST_SERVER_PGP
 SERVER_WORK_DIR=C:\temp\pgp\TEST_SERVER_PGP
 HTTP_PORT=7800
