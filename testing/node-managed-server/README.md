@@ -37,7 +37,8 @@ Integration Node (TEST_NODE)
 
 ## Prerequisites
 
-- IBM ACE 13.0.6.0 installed at `C:\Program Files\IBM\ACE\13.0.6.0`
+- IBM ACE 13.0.8.1 installed at `C:\Program Files\IBM\ACE\13.0.8.1`
+  (override with `set ACE_VERSION=13.0.7.0` before running the script)
 - PGP SupportPac installed (JARs in `MQSI_REGISTRY/shared-classes/`)
 - Test resources available in `testing/test-resources/Sources/`
 - Administrative privileges (for creating Windows services)
@@ -238,7 +239,7 @@ To remove the test environment:
 
 ```batch
 cd testing\node-managed-server\scripts
-call "C:\Program Files\IBM\ACE\13.0.6.0\server\bin\mqsiprofile.cmd"
+call "C:\Program Files\IBM\ACE\13.0.8.1\server\bin\mqsiprofile.cmd"
 ibmint stop node TEST_NODE
 ibmint delete node TEST_NODE --delete-all-files
 rmdir /s /q C:\temp\pgp-node
@@ -253,6 +254,10 @@ rmdir /s /q C:\temp\pgp-node
 
 ## Version History
 
+- **2026-08-11**: Validated on ACE 13.0.8.1
+  - ACE version is now driven by `ACE_VERSION` (defaults to 13.0.8.1)
+  - Encryption on SERVER_ENCRYPT and decryption on SERVER_DECRYPT both pass,
+    round trip matches, no BIP errors in either server log
 - **2026-02-16**: Initial implementation with automated setup and testing
   - Fixed JAR installation location (node level vs server level)
   - Fixed ibmint command syntax for node-managed environments

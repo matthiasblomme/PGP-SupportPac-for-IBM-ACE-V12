@@ -186,18 +186,21 @@ All testing approaches validate:
 
 ### Docker Testing
 - **Status:** ✅ All tests passing
-- **Last Tested:** 2026-02-13
-- **ACE Version:** 13.0.6.0-r1
+- **Last Tested:** 2026-08-11
+- **ACE Version:** 13.0.8.1-r1
 - **Platform:** Docker (Linux containers)
 
 ### Standalone Server Testing
 - **Status:** ✅ All tests passing
-- **Last Tested:** 2026-02-12
-- **ACE Version:** 13.0.6.0
+- **Last Tested:** 2026-08-11
+- **ACE Version:** 13.0.8.1
 - **Platform:** Windows 10/11
 
 ### Node-Managed Testing
-- **Status:** 🚧 Not yet implemented
+- **Status:** ✅ All tests passing
+- **Last Tested:** 2026-08-11
+- **ACE Version:** 13.0.8.1
+- **Platform:** Windows 10/11
 
 ## Documentation
 
@@ -299,7 +302,17 @@ jobs:
 | ACE Version | Docker | Standalone | Node-Managed |
 |-------------|--------|------------|--------------|
 | 12.0.x | ✅ | ✅ | 🚧 |
-| 13.0.x | ✅ | ✅ | 🚧 |
+| 13.0.x | ✅ | ✅ | ✅ |
+
+The Windows scripts target ACE 13.0.8.1 by default. To test another installed
+version, set `ACE_VERSION` before running:
+
+```cmd
+set ACE_VERSION=13.0.7.0
+testing\standalone-server\run-test-with-ace-env.bat
+```
+
+For Docker, set `ACE_IMAGE_TAG` before `docker compose up` (default `13.0.8.1-r1`).
 
 ## Support
 

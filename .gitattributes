@@ -1,0 +1,8 @@
+# Shell scripts run inside Linux containers (testing/docker mounts them directly
+# from the working tree). With core.autocrlf=true a Windows checkout rewrites them
+# to CRLF and bash fails with "$'\r': command not found". Keep them LF always.
+*.sh text eol=lf
+
+# Windows batch scripts stay CRLF, including on a Linux checkout.
+*.bat text eol=crlf
+*.cmd text eol=crlf
