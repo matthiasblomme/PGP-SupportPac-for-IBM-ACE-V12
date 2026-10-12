@@ -48,6 +48,7 @@ Based on compiled code from [MyOpenTech-PGP-SupportPac](https://github.com/matth
 | 13.0.6.0 | ✅ Tested and validated | 2026-02-12 | See [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SETUP-WALKTHROUGH-ACE-13.md) |
 | 13.0.7.0 | ✅ Tested and validated | 2026-04-02 | |
 | 13.0.8.1 | ✅ Tested and validated | 2026-08-11 | Standalone, node-managed and container all pass. On 13.0.8 container images call-home must be disabled before the server will start - see [testing/docker/README.md](testing/docker/README.md) |
+| 13.0.9.0 | Tested and validated | 2026-10-12 | Standalone, node-managed and container (`13.0.9.0-r1`) all pass. The call-home workaround is still needed on 13.0.9 container images |
 
 ## What's Included
 
@@ -128,7 +129,7 @@ PGP-SupportPac-for-IBM-ACE-V12/
 - ✅ **Toolkit Integration** - PGP nodes available in ACE Toolkit palette
 - ✅ **Policy-Based Configuration** - Flexible policy-based key management
 - ✅ **Automated Installation** - One-command installation script
-- ✅ **ACE 13.x Compatible** - Tested and validated up to ACE 13.0.8.1
+- **ACE 13.x Compatible** - Tested and validated up to ACE 13.0.9.0
 
 ## Getting Started
 
@@ -173,7 +174,7 @@ Or follow the complete walkthrough in [TEST-SETUP-WALKTHROUGH-ACE-13.md](TEST-SE
 
 When using IBM ACE UBI (Universal Base Image) containers, the Java classloader may load older encryption JARs from the base image instead of the Bouncy Castle 1.81 JARs provided by this SupportPac.
 
-**Status:** Not reproduced on `cp.icr.io/cp/appc/ace:13.0.8.1-r1` (2026-08-11). That image ships Bouncy Castle 1.84 in `server/webservices/prereqs` and `server/MQ/lib`, but the JARs in the integration server `shared-classes` directory won the classpath - the encrypted output reported `Version: BCPG v1.81` and the round trip succeeded with no errors in the server log.
+**Status:** Not reproduced on `cp.icr.io/cp/appc/ace:13.0.9.0-r1` (2026-10-12, base image ships Bouncy Castle 1.85) nor on `13.0.8.1-r1` (2026-08-11). The 13.0.8.1 image ships Bouncy Castle 1.84 in `server/webservices/prereqs` and `server/MQ/lib`, but the JARs in the integration server `shared-classes` directory won the classpath - the encrypted output reported `Version: BCPG v1.81` and the round trip succeeded with no errors in the server log.
 **Impact:** Docker testing only (standalone and node-managed deployments are not affected)
 **Symptoms:** Encryption/decryption failures, classloader errors, wrong JAR versions loaded
 **Workaround:** Verify JAR versions in the container: `docker exec ace-pgp-test ls -la /home/aceuser/ace-server/shared-classes/`

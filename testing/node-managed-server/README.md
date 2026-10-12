@@ -254,6 +254,16 @@ rmdir /s /q C:\temp\pgp-node
 
 ## Version History
 
+- **2026-10-12**: Validated on ACE 13.0.9.0 (`set ACE_VERSION=13.0.9.0`)
+  - Encryption on SERVER_ENCRYPT and decryption on SERVER_DECRYPT both pass, round
+    trip matches; debug user trace shows `PGPEncrypterNode` and `PGPDecrypterNode`
+    evaluating without exceptions
+  - On Windows the node-managed servers do not write `events.txt`: server events go to
+    the Windows Application event log (source `IBM App Connect Enterprise v13090`) and
+    traces to `C:\temp\pgp-node\TEST_NODE\common\log\`
+  - The install step also puts the Bouncy Castle JARs in the machine-wide
+    `MQSI_REGISTRY\shared-classes`, so a passing run here does not on its own prove that
+    node-level `shared-classes` is enough
 - **2026-08-11**: Validated on ACE 13.0.8.1
   - ACE version is now driven by `ACE_VERSION` (defaults to 13.0.8.1)
   - Encryption on SERVER_ENCRYPT and decryption on SERVER_DECRYPT both pass,

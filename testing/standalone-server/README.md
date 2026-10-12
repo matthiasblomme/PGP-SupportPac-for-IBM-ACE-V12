@@ -7,8 +7,8 @@ Test the PGP SupportPac on a local Windows system with IBM ACE installed.
 This testing approach uses a Standalone Integration Server (SIS) running directly on Windows. It provides the most production-like testing environment for Windows deployments.
 
 **Status:** ✅ Fully Implemented and Tested  
-**Last Tested:** 2026-08-11  
-**ACE Version:** 13.0.8.1
+**Last Tested:** 2026-10-12  
+**ACE Version:** 13.0.9.0 (run with `set ACE_VERSION=13.0.9.0`; script default is still 13.0.8.1)
 
 ## Quick Start
 
