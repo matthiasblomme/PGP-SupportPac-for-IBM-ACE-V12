@@ -186,21 +186,37 @@ All testing approaches validate:
 
 ### Docker Testing
 - **Status:** ✅ All tests passing
-- **Last Tested:** 2026-08-11
-- **ACE Version:** 13.0.8.1-r1
+- **Last Tested:** 2026-10-12
+- **ACE Version:** 13.0.9.0-r1 (also 13.0.8.1-r1 on 2026-08-11)
 - **Platform:** Docker (Linux containers)
 
 ### Standalone Server Testing
 - **Status:** ✅ All tests passing
-- **Last Tested:** 2026-08-11
-- **ACE Version:** 13.0.8.1
+- **Last Tested:** 2026-10-12
+- **ACE Version:** 13.0.9.0 (also 13.0.8.1 on 2026-08-11)
 - **Platform:** Windows 10/11
 
 ### Node-Managed Testing
 - **Status:** ✅ All tests passing
-- **Last Tested:** 2026-08-11
-- **ACE Version:** 13.0.8.1
+- **Last Tested:** 2026-10-12
+- **ACE Version:** 13.0.9.0 (also 13.0.8.1 on 2026-08-11)
 - **Platform:** Windows 10/11
+
+### Known Issue: HTTP 200 does not mean the flow succeeded
+
+Both test flows (`TestPGP_App/pgp/encrypt.msgflow` and `decrypt.msgflow`) contain a
+leftover **File Read** node after the PGP node, pointing at `D:\temp\Matthias\pgp`. On
+every call it fails with `BIP4990E: The directory 'D:\temp\Matthias\pgp' does not
+exist`, and because its `failure` terminal is wired to the HTTP Reply the error is
+swallowed and the client still gets HTTP 200. It is only visible in a user trace
+(`mqsichangetrace <node> -u -e <server> -l debug -r`, output in
+`<node-work-dir>/common/log/<node>.<server>.userTrace.0.txt`).
+
+The PGP nodes themselves run before it and complete normally, so the round-trip
+comparison is still a valid test - but neither the HTTP status nor `curl`'s exit code
+is. Pass/fail rests on the `fc /B` comparison (Windows scripts) and the file comparison
+in `run-tests.sh` (Docker). Note that the Windows scripts print `[WARNING]` on a
+mismatch and still exit 0, so read the output for `[SUCCESS]`.
 
 ## Documentation
 
