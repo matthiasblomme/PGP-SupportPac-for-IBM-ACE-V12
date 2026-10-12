@@ -39,6 +39,25 @@ else
   error_exit "mqsiprofile not found at $ACE_DIR/server/bin/mqsiprofile"
 fi
 
+# 13.0.8 images ship call-home (anonymous usage statistics) enabled with a placeholder
+# company name, and the integration server refuses to start until that placeholder is
+# replaced (BIP2203E / BIP15366W):
+#   CallHome:
+#     companyName: 'REPLACE_ME_COMPANY_NAME'
+#     enabled: true
+# We do not send usage statistics, so turn call-home off instead of inventing a name.
+# This mirrors registry.13.0.conf.yaml on a configured Windows install. Note that
+# 'ibmint modify installation --disable-usage-statistics' returns 0 but does NOT clear
+# the requirement on its own. Harmless on 13.0.6/13.0.7, which have no such check.
+REGISTRY_CONF="${MQSI_WORKPATH:-/var/mqsi}/registry.13.0.conf.yaml"
+if [ -f "$REGISTRY_CONF" ]; then
+  log_info "Disabling call-home in $REGISTRY_CONF"
+  printf 'CallHome:\n  enabled: false\n' > "$REGISTRY_CONF" \
+    || error_exit "Failed to disable call-home"
+else
+  log_warn "No $REGISTRY_CONF found - skipping call-home configuration"
+fi
+
 # Step 1: Start the integration server initially to create directory structure
 log_step "Step 1: Starting integration server to initialize..."
 
@@ -71,7 +90,8 @@ sleep 5
 
 # Step 2: Stop the server for installation
 log_step "Step 2: Stopping server for installation..."
-kill $SERVER_PID || pkill -f IntegrationServer
+# Note: the UBI image has no pkill (procps is not installed), so do not rely on it
+kill $SERVER_PID 2>/dev/null || log_warn "Server process $SERVER_PID already gone"
 sleep 5
 log_info "Server stopped"
 

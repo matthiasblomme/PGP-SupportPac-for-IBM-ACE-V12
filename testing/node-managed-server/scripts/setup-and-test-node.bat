@@ -20,12 +20,16 @@ set SERVER_DECRYPT=SERVER_DECRYPT
 set TEST_DIR=C:\temp\pgp
 set PORT_ENCRYPT=7800
 set PORT_DECRYPT=7801
+REM ACE version can be overridden: set ACE_VERSION=13.0.7.0 before calling
+if not defined ACE_VERSION set ACE_VERSION=13.0.8.1
+set ACE_HOME=C:\Program Files\IBM\ACE\%ACE_VERSION%
 
 echo ============================================================================
 echo Node-Managed PGP SupportPac Testing
 echo ============================================================================
 echo.
 echo Configuration:
+echo   ACE Version: %ACE_VERSION%
 echo   Node Name: %NODE_NAME%
 echo   Node Work Dir: %NODE_WORK_DIR%
 echo   Server 1 (Encrypt): %SERVER_ENCRYPT% (port %PORT_ENCRYPT%)
@@ -36,8 +40,8 @@ echo.
 REM ============================================================================
 REM Step 1: Source ACE Environment
 REM ============================================================================
-echo [Step 1/13] Sourcing ACE environment...
-call "C:\Program Files\IBM\ACE\13.0.7.0\server\bin\mqsiprofile.cmd"
+echo [Step 1/13] Sourcing ACE environment (%ACE_VERSION%)...
+call "%ACE_HOME%\server\bin\mqsiprofile.cmd"
 if errorlevel 1 (
     echo [ERROR] Failed to source ACE environment
     goto :error_exit
@@ -49,7 +53,7 @@ REM ============================================================================
 REM Step 2: Install PGP SupportPac (force clean install before testing)
 REM ============================================================================
 echo [Step 2/13] Installing PGP SupportPac...
-call "%PROJECT_ROOT%\installation-scripts\install-pgp-supportpac.bat" /force /skipbackup
+call "%PROJECT_ROOT%\installation-scripts\install-pgp-supportpac.bat" "%ACE_HOME%" /force /skipbackup
 if errorlevel 1 (
     echo [ERROR] PGP SupportPac installation failed
     goto :error_exit
@@ -63,10 +67,10 @@ REM ============================================================================
 echo [Step 3/13] Cleaning up old node (if exists)...
 echo [INFO] Stopping old node...
 ibmint stop node %NODE_NAME% 2>nul
-timeout /t 3 /nobreak >nul
+ping 127.0.0.1 -n 4 >nul
 echo [INFO] Deleting old node with all files...
 ibmint delete node %NODE_NAME% --delete-all-files 2>nul
-timeout /t 3 /nobreak >nul
+ping 127.0.0.1 -n 4 >nul
 echo [OK] Old node cleaned up
 
 REM Create parent directory
@@ -96,7 +100,7 @@ if errorlevel 1 (
     goto :error_exit
 )
 echo [OK] Integration node started
-timeout /t 5 /nobreak >nul
+ping 127.0.0.1 -n 6 >nul
 echo.
 
 REM ============================================================================
@@ -145,14 +149,14 @@ REM Step 8: Restart Node (Required after installing JARs)
 REM ============================================================================
 echo [Step 8/13] Restarting node to load JARs...
 ibmint stop node %NODE_NAME%
-timeout /t 3 /nobreak >nul
+ping 127.0.0.1 -n 4 >nul
 ibmint start node %NODE_NAME%
 if errorlevel 1 (
     echo [ERROR] Failed to restart integration node
     goto :error_exit
 )
 echo [OK] Node restarted
-timeout /t 5 /nobreak >nul
+ping 127.0.0.1 -n 6 >nul
 echo.
 
 REM ============================================================================
@@ -181,14 +185,14 @@ REM Step 10: Restart Node to Apply Port Configuration
 REM ============================================================================
 echo [Step 10/13] Restarting node to apply port configuration...
 ibmint stop node %NODE_NAME%
-timeout /t 3 /nobreak >nul
+ping 127.0.0.1 -n 4 >nul
 ibmint start node %NODE_NAME%
 if errorlevel 1 (
     echo [ERROR] Failed to restart integration node
     goto :error_exit
 )
 echo [OK] Node restarted
-timeout /t 10 /nobreak >nul
+ping 127.0.0.1 -n 11 >nul
 echo.
 
 REM ============================================================================
@@ -226,7 +230,7 @@ echo.
 
 REM Wait for deployments to complete
 echo [INFO] Waiting for deployments to complete...
-timeout /t 10 /nobreak >nul
+ping 127.0.0.1 -n 11 >nul
 
 REM ============================================================================
 REM Step 12: Verify HTTP Listeners
@@ -335,4 +339,4 @@ exit /b 1
 
 :normal_exit
 endlocal
-exit /b 0
+exit /b 0

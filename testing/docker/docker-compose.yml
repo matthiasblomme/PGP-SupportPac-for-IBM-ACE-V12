@@ -1,6 +1,7 @@
 services:
   ace-pgp-test:
-    image: cp.icr.io/cp/appc/ace:13.0.6.0-r1
+    # Override with: set ACE_IMAGE_TAG=13.0.6.0-r1  (before docker compose up)
+    image: cp.icr.io/cp/appc/ace:${ACE_IMAGE_TAG:-13.0.8.1-r1}
     container_name: ace-pgp-test
     hostname: ace-pgp-test
     user: root
