@@ -1,9 +1,10 @@
 @echo off
 REM ============================================================================
-REM PGP SupportPac - Complete Deployment and Test Script for ACE 13.0.7.0
+REM PGP SupportPac - Complete Deployment and Test Script for ACE 13.x
 REM ============================================================================
 REM This script performs a complete setup, deployment, and test of the PGP
-REM SupportPac for IBM ACE 13.0.7.0
+REM SupportPac for IBM ACE. Target version defaults to 13.0.8.1 and can be
+REM overridden by setting ACE_VERSION before calling.
 REM ============================================================================
 
 setlocal enabledelayedexpansion
@@ -13,7 +14,7 @@ set SCRIPT_DIR=%~dp0
 set PROJECT_ROOT=%SCRIPT_DIR%..\..
 set TEST_RESOURCES=%PROJECT_ROOT%\testing\test-resources
 set SOURCES_DIR=%TEST_RESOURCES%\Sources
-set ACE_VERSION=13.0.7.0
+if not defined ACE_VERSION set ACE_VERSION=13.0.8.1
 set ACE_HOME=C:\Program Files\IBM\ACE\%ACE_VERSION%
 set SERVER_NAME=TEST_SERVER_PGP
 set SERVER_WORK_DIR=C:\temp\pgp\%SERVER_NAME%
@@ -39,7 +40,7 @@ REM ============================================================================
 REM Step 1: Install PGP SupportPac (force clean install before testing)
 REM ============================================================================
 echo [Step 1/11] Installing PGP SupportPac...
-call "%PROJECT_ROOT%\installation-scripts\install-pgp-supportpac.bat" /force /skipbackup
+call "%PROJECT_ROOT%\installation-scripts\install-pgp-supportpac.bat" "%ACE_HOME%" /force /skipbackup
 if errorlevel 1 (
     echo [ERROR] PGP SupportPac installation failed
     goto :error_exit
