@@ -1,0 +1,18 @@
+# Generic-rule false positives for the public-repo-scrub commit gate (tracked, public).
+# PGP test fixtures: the test keys and their test identities.
+path:testing/test-resources/Sources/pgp-keys/*
+path:Test Project/Sources/pgp-keys/*
+receiver@testpgp.com
+sender@testpgp.com
+# Placeholder addresses in the docs and test flows.
+email@domain.com
+sender-pgpkeys@email.com
+# Public sites named in LICENSE and the implementation guide.
+unlicense.org
+www.bouncycastle.org
+mvnrepository.com
+# Vendor jars (BouncyCastle and friends): manifest package names and digest keys.
+path:*.jar
+# Screenshot paths in the ACE 13 test walkthrough, and a Java class name.
+re:TEST-SETUP-WALKTHROUGH-ACE-13/image-\d+
+X509CertificateEncodingException
